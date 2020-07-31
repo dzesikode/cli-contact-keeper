@@ -19,7 +19,7 @@ print('---------------Contact Book---------------')
 print(start_menu)
 
 
-# Connect to the engine
+# Connect to the engine.
 engine = create_engine('sqlite:///contact_book.db', echo=True)
 
 # Declare a mapping
