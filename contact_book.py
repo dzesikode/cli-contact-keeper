@@ -20,7 +20,7 @@ print(start_menu)
 
 
 # Connect to the engine.
-engine = create_engine('sqlite:///contact_book.db', echo=True)
+engine = create_engine('sqlite:///contact_book.db', echo=False)
 
 # Declare a mapping
 Base = declarative_base()
@@ -49,8 +49,8 @@ class Contact(Base):
                 self.city + ', ' + self.state + ' ' + self.zipcode + \
                 '\n' + self.country
 
-    def __str__(self):
-        return ({self.last_name}, {self.first_name})
+    def __repr__(self):
+        return self.last_name + ', ' + self.first_name
 
 # Create a schema
 Base.metadata.create_all(engine)
@@ -161,23 +161,26 @@ def search_contacts():
         'message': 'Enter a name: ',
         },
     ]
-    search_query = prompt(search_field)
-    print(search_query['search'])
+    search_prompt = prompt(search_field)
+    search_query = search_prompt['search']
+    print(search_query)
+
     search_results = session.query(Contact).filter(
                      or_(
-                     Contact.last_name.ilike("%mom%"),
-                     Contact.first_name.ilike("%mom%"))
-                )
+                     (Contact.last_name.ilike(f'%{search_query}%')),
+                     (Contact.first_name.ilike(f'%{search_query}%'))
+                ))
     return search_results
+    print("Search done.")
 
 choice = input()
+
 
 # View all entries
 if choice.upper() == 'V':
     for instance in session.query(Contact).order_by(Contact.last_name):
         print(instance.last_name + ', ' + instance.first_name + ' | ' +
-              instance.phone_number + ' | ' + instance.email + ' | ' +
-              instance.address)
+              instance.phone_number + ' | ' + instance.email)
 
 # Add a new contact
 
@@ -206,7 +209,9 @@ elif choice.upper() == 'D':
 # Search the contact book
 elif choice.upper() == 'S':
     search_results = search_contacts()
-    print(search_results)
+    print("RESULT:")
+    print(*search_results.all())
+
     # TODO: Present fields to fill in
     # session.query(Contact).filter_by()
 
