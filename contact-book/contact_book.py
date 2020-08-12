@@ -1,10 +1,9 @@
 from __future__ import print_function, unicode_literals
-from sqlalchemy import create_engine, or_, func
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import or_, func
 from PyInquirer import prompt, print_json
 from models import Base, Contact
-from helpers import db_connect
+from helpers import db_connect, add_contact, search_prompt, view_all_entries
+from view import print_header, print_all_info
 
 
 if __name__ == '__main__':
@@ -21,128 +20,14 @@ if __name__ == '__main__':
     print('---------------Contact Book---------------')
     print(start_menu)
 
-
-    # # Connect to the engine.
-    # engine = create_engine('sqlite:///contact_book.db', echo=False)
-    #
-    #
-    # # Create a schema
-    # Base.metadata.create_all(engine)
-    #
-    # # Create a session
-    # Session = sessionmaker(bind=engine)
-    # Session.configure(bind=engine)
-    #
-    # # Instantiate when you need to connect with the database
-    # session = Session()
-
-    session = db_connect()
-
-    def add_contact():
-        """
-        Save a new contact to the database.
-        """
-        contact_fields = [
-            {
-            'type': 'input',
-            'name': 'first_name',
-            'message': 'First Name: ',
-            },
-            {
-            'type': 'input',
-            'name': 'last_name',
-            'message': 'Last Name: ',
-            },
-            {
-            'type': 'input',
-            'name': 'email',
-            'message': 'Email Address: ',
-            },
-            {
-            'type': 'input',
-            'name': 'phone_number',
-            'message': 'Phone Number: ',
-            },
-            {
-            'type': 'input',
-            'name': 'address_line_1',
-            'message': 'Address Line 1: ',
-            },
-            {
-            'type': 'input',
-            'name': 'address_line_2',
-            'message': 'Address Line 2: ',
-            },
-            {
-            'type': 'input',
-            'name': 'city',
-            'message': 'City: ',
-            },
-            {
-            'type': 'input',
-            'name': 'state',
-            'message': 'State: ',
-            },
-            {
-            'type': 'input',
-            'name': 'zipcode',
-            'message': 'Zipcode: ',
-            },
-            {
-            'type': 'input',
-            'name': 'country',
-            'message': 'Country: ',
-            },
-        ]
-        answers = prompt(contact_fields)
-        print(answers)
-        new_contact = Contact(first_name=answers['first_name'],
-                              last_name=answers['last_name'],
-                              email=answers['email'],
-                              phone_number=answers['phone_number'],
-                              address_line_1=answers['address_line_1'],
-                              address_line_2=answers['address_line_2'],
-                              city=answers['city'],
-                              state=answers['state'],
-                              zipcode=answers['zipcode'],
-                              country=answers['country'])
-        print(new_contact.first_name)
-        session.add(new_contact)
-
-
-    def search_contacts():
-        search_field = [
-            {
-            'type': 'input',
-            'name': 'search',
-            'message': 'Enter a name: ',
-            },
-        ]
-        search_prompt = prompt(search_field)
-        search_query = search_prompt['search']
-        return search_query
-
-    def print_header():
-        print('ID'.center(3), 'Last Name'.center(31), 'First Name'.center(20),
-              'Phone Number'.center(20), 'Email'.center(30), 'Address Line 1'.center(30),
-              'Address Line 2'.center(20), 'City'.center(20), 'State'.center(15),
-              'ZIP'.center(10), 'Country'.center(20))
-
-    def print_all_info(instance):
-        print(str(instance.id).ljust(3) + ' | ' + instance.last_name.ljust(30) + ' | ' + instance.first_name.ljust(20) + ' | ' +
-              instance.phone_number.ljust(20) + ' | ' + instance.email.ljust(30) + ' | ' +
-              instance.address_line_1.ljust(30) + '  ' + instance.address_line_2.ljust(20) + '  ' +
-              instance.city.ljust(20) + ', ' + instance.state.ljust(15) + '  ' + instance.zipcode.ljust(10) +
-              '  ' + instance.country.ljust(20))
-
     choice = input()
 
+    session = db_connect()
 
     # View all entries
     if choice.upper() == 'V':
             print_header()
-            for instance in session.query(Contact).order_by(Contact.last_name):
-                print_all_info(instance)
+            view_all_entries()
 
     # Add a new contact
     elif choice.upper() == 'A':
@@ -161,15 +46,14 @@ if __name__ == '__main__':
                 break
             else:
                 add_contact()
-        session.commit()
 
     # Delete a contact
     elif choice.upper() == 'D':
-        search_contacts()
+        search_query = search_prompt()
 
     # Search the contact book
     elif choice.upper() == 'S':
-        search_query = search_contacts()
+        search_query = search_prompt()
         print_header()
         for instance in session.query(Contact).filter(
                          or_(
