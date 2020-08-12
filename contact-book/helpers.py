@@ -1,8 +1,8 @@
 from models import Base, Contact
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
 from PyInquirer import prompt, print_json
-from view import print_all_info
+from view import print_all_info, print_header
 
 def db_connect():
     """
@@ -114,5 +114,16 @@ def search_prompt():
     return search_query
 
 def view_all_entries():
+    print_header()
     for instance in session.query(Contact).order_by(Contact.last_name):
         print_all_info(instance)
+
+def search_results():
+    search_query = search_prompt()
+    print_header()
+    for instance in session.query(Contact).filter(
+                     or_(
+                     (Contact.last_name.ilike(f'%{search_query}%')),
+                     (Contact.first_name.ilike(f'%{search_query}%'))
+                )):
+                    print_all_info(instance)

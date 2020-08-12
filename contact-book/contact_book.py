@@ -1,8 +1,8 @@
 from __future__ import print_function, unicode_literals
-from sqlalchemy import or_, func
-from PyInquirer import prompt, print_json
+from sqlalchemy import or_
+from PyInquirer import prompt
 from models import Base, Contact
-from helpers import db_connect, add_contact, search_prompt, view_all_entries
+from helpers import *
 from view import print_header, print_all_info
 
 
@@ -26,8 +26,7 @@ if __name__ == '__main__':
 
     # View all entries
     if choice.upper() == 'V':
-            print_header()
-            view_all_entries()
+        view_all_entries()
 
     # Add a new contact
     elif choice.upper() == 'A':
@@ -53,14 +52,7 @@ if __name__ == '__main__':
 
     # Search the contact book
     elif choice.upper() == 'S':
-        search_query = search_prompt()
-        print_header()
-        for instance in session.query(Contact).filter(
-                         or_(
-                         (Contact.last_name.ilike(f'%{search_query}%')),
-                         (Contact.first_name.ilike(f'%{search_query}%'))
-                    )):
-                        print_all_info(instance)
+        search_results()
 
     # Update contact information
     elif choice == 'U':
