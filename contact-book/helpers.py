@@ -25,6 +25,7 @@ def db_connect():
 
     return session
 
+
 session = db_connect()
 
 
@@ -131,10 +132,41 @@ def search_results():
     Displays results based on the search query, along with a header.
     """
     search_query = search_prompt()
+    trunacted_results = []
     print_header()
     for instance in session.query(Contact).filter(
                      or_(
                      (Contact.last_name.ilike(f'%{search_query}%')),
                      (Contact.first_name.ilike(f'%{search_query}%'))
                 )):
+                    trunacted_results.append(instance.first_name + ' ' + instance.last_name)
                     print_all_info(instance)
+    return trunacted_results
+
+
+def delete_contact():
+    """
+    Removes the specified contact from the database.
+    """
+    trunacted_results = search_results()
+    results = [
+        {
+            'type': 'list',
+            'name': 'choose_delete',
+            'message': 'Choose the contact that you wish to delete:',
+            'choices': trunacted_results,
+        },
+    ]
+    choice = prompt(results)
+    name = choice['choose_delete']
+    # message = f"Are you sure you want to delete {name} from the contact book?"
+
+    delete_confirmation = [
+        {
+            'type': 'confirm',
+            'message': f'Are you sure you want to delete {name} from the contact book?',
+            'name': 'delete_contact',
+            'default': False,
+        }
+    ]
+    confirmation = prompt(delete_confirmation)
