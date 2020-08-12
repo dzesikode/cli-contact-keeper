@@ -114,11 +114,17 @@ def search_prompt():
     return search_query
 
 def view_all_entries():
+    """
+    Views all entries within the database, along with a header.
+    """
     print_header()
     for instance in session.query(Contact).order_by(Contact.last_name):
         print_all_info(instance)
 
 def search_results():
+    """
+    Displays results based on the search query, along with a header.
+    """
     search_query = search_prompt()
     print_header()
     for instance in session.query(Contact).filter(
