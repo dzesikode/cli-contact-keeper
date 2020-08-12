@@ -1,3 +1,2 @@
 .env
-contact_book.db
-contact_book.db
+contact-book/contact_book.db
