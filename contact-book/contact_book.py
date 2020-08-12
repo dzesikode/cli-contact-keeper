@@ -1,8 +1,10 @@
 from __future__ import print_function, unicode_literals
-from sqlalchemy import create_engine, Sequence, Column, Integer, String, or_, func
+from sqlalchemy import create_engine, or_, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from PyInquirer import prompt, print_json
+from models import Base, Contact
+from helpers import db_connect
 
 
 if __name__ == '__main__':
@@ -20,46 +22,21 @@ if __name__ == '__main__':
     print(start_menu)
 
 
-    # Connect to the engine.
-    engine = create_engine('sqlite:///contact_book.db', echo=False)
+    # # Connect to the engine.
+    # engine = create_engine('sqlite:///contact_book.db', echo=False)
+    #
+    #
+    # # Create a schema
+    # Base.metadata.create_all(engine)
+    #
+    # # Create a session
+    # Session = sessionmaker(bind=engine)
+    # Session.configure(bind=engine)
+    #
+    # # Instantiate when you need to connect with the database
+    # session = Session()
 
-    # Declare a mapping
-    Base = declarative_base()
-
-    class Contact(Base):
-
-        __tablename__ = 'contacts'
-
-        fields = ['last_name', 'first_name', 'address_line_1', 'address_line_2',
-                 'city', 'state', 'zipcode', 'country', 'phone_number', 'email']
-
-        id = Column(Integer, Sequence('contact_id_seq'), primary_key=True)
-        last_name = Column(String)
-        first_name = Column(String)
-        phone_number = Column(String)
-        email = Column(String)
-        address_line_1 = Column(String)
-        address_line_2 = Column(String)
-        city = Column(String)
-        state = Column(String)
-        zipcode = Column(String)
-        country = Column(String)
-
-        def __repr__(self):
-            return self.last_name + ', ' + self.first_name
-
-
-    # Create a schema
-    Base.metadata.create_all(engine)
-
-    # Create a session
-    Session = sessionmaker(bind=engine)
-    Session.configure(bind=engine)
-
-    # Instantiate when you need to connect with the database
-    session = Session()
-
-
+    session = db_connect()
 
     def add_contact():
         """
