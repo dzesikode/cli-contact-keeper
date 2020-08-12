@@ -1,8 +1,9 @@
 from models import Base, Contact
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
-from PyInquirer import prompt, print_json
+from PyInquirer import prompt
 from view import print_all_info, print_header
+
 
 def db_connect():
     """
@@ -25,6 +26,7 @@ def db_connect():
     return session
 
 session = db_connect()
+
 
 def add_contact():
     """
@@ -98,6 +100,7 @@ def add_contact():
     session.add(new_contact)
     session.commit()
 
+
 def search_prompt():
     """
     Prompt that returns a search query for use with querying the database
@@ -113,6 +116,7 @@ def search_prompt():
     search_query = search_prompt['search']
     return search_query
 
+
 def view_all_entries():
     """
     Views all entries within the database, along with a header.
@@ -120,6 +124,7 @@ def view_all_entries():
     print_header()
     for instance in session.query(Contact).order_by(Contact.last_name):
         print_all_info(instance)
+
 
 def search_results():
     """
