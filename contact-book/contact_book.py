@@ -3,22 +3,11 @@ from sqlalchemy import or_
 from PyInquirer import prompt
 from models import Base, Contact
 from helpers import *
-from view import print_header, print_all_info
+from view import print_start_menu, print_header, print_all_info
 
 
 if __name__ == '__main__':
-
-    START_MENU_CHOICES = ['V', 'A', 'D', 'S', 'U', 'X']
-
-    start_menu = ("[V] -- View all entries\n"
-                  "[A] -- Add new contact\n"
-                  "[D] -- Delete a contact\n"
-                  "[S] -- Search the address book\n"
-                  "[U] -- Update contact information\n"
-                  "[X] -- Exit the program\n")
-
-    print('---------------Contact Book---------------')
-    print(start_menu)
+    print_start_menu()
 
     choice = input()
 
@@ -48,7 +37,7 @@ if __name__ == '__main__':
 
     # Delete a contact
     elif choice.upper() == 'D':
-        search_query = search_prompt()
+        delete_contact()
 
     # Search the contact book
     elif choice.upper() == 'S':

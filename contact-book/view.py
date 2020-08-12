@@ -1,5 +1,18 @@
 
 
+def print_start_menu():
+    START_MENU_CHOICES = ['V', 'A', 'D', 'S', 'U', 'X']
+
+    start_menu = ("[V] -- View all entries\n"
+                  "[A] -- Add new contact\n"
+                  "[D] -- Delete a contact\n"
+                  "[S] -- Search the address book\n"
+                  "[U] -- Update contact information\n"
+                  "[X] -- Exit the program\n")
+
+    print('---------------Contact Book---------------')
+    print(start_menu)
+
 def print_header():
     """
     Prints the header for the UI when viewing a contact.
