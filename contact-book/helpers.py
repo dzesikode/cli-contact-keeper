@@ -139,7 +139,9 @@ def search_results():
                      (Contact.last_name.ilike(f'%{search_query}%')),
                      (Contact.first_name.ilike(f'%{search_query}%'))
                 )):
-                    trunacted_results.append(instance.first_name + ' ' + instance.last_name)
+                    trunacted_results.append('ID#:' + str(instance.id) + ' ' +
+                                             instance.first_name + ' ' +
+                                             instance.last_name)
                     print_all_info(instance)
     return trunacted_results
 
@@ -159,7 +161,6 @@ def delete_contact():
     ]
     choice = prompt(results)
     name = choice['choose_delete']
-    # message = f"Are you sure you want to delete {name} from the contact book?"
 
     delete_confirmation = [
         {
@@ -170,3 +171,12 @@ def delete_contact():
         }
     ]
     confirmation = prompt(delete_confirmation)
+    if confirmation['delete_contact'] == True:
+        try:
+            session.query(Contact).filter_by(id=int(name[4])).delete()
+            session.commit()
+            print("Contact successfully deleted.")
+        except Exception:
+            print("An error occured.")
+    else:
+        print("Operation cancelled.")
