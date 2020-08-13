@@ -183,6 +183,7 @@ def delete_contact():
     else:
         print("Operation cancelled.")
 
+
 def update_contact():
     """
     Updates contact information.
@@ -217,9 +218,6 @@ def update_contact():
             filter_id(name).update({"first_name": new_first_name})
         if new_last_name :
             filter_id(name).update({"last_name": new_last_name})
-            session.query(Contact).filter_by(
-                                            id=int(name[4])).update(
-                                            {"last_name": new_last_name})
         session.commit()
     elif update_choice['update'] == 'Phone Number':
         new_phone_number = input("Enter a new phone number (Press Enter to keep current phone number) ")
