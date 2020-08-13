@@ -12,7 +12,6 @@ def db_connect():
     # Connect to the engine.
     engine = create_engine('sqlite:///contact_book.db', echo=False)
 
-
     # Create a schema
     Base.metadata.create_all(engine)
 
@@ -24,8 +23,6 @@ def db_connect():
     session = Session()
 
     return session
-
-
 session = db_connect()
 
 
@@ -146,6 +143,11 @@ def search_results():
     return trunacted_results
 
 
+def filter_id(name):
+    filter_id = session.query(Contact).filter_by(id=int(name[4]))
+    return filter_id
+
+
 def delete_contact():
     """
     Removes the specified contact from the database.
@@ -180,3 +182,62 @@ def delete_contact():
             print("An error occured.")
     else:
         print("Operation cancelled.")
+
+def update_contact():
+    """
+    Updates contact information.
+    """
+    trunacted_results = search_results()
+    results = [
+        {
+            'type': 'list',
+            'name': 'choose_update',
+            'message': 'Choose the contact that you wish to update:',
+            'choices': trunacted_results,
+        },
+    ]
+    choice = prompt(results)
+    name = choice['choose_update']
+    update_choices = [
+        {
+            'type': 'list',
+            'name': 'update',
+            'message': 'What would you like to change?',
+            'choices': ['Name', 'Phone Number', 'Email',
+                        'Postal Address']
+        }
+    ]
+    update_choice = prompt(update_choices)
+    if update_choice['update'] == 'Name':
+        new_first_name = input("Enter a new first name (Press Enter to keep current name) ")
+        print(new_first_name)
+        new_last_name = input("Enter a new last name (Press Enter to keep current name) ")
+        print(new_last_name)
+        if new_first_name:
+            filter_id(name).update({"first_name": new_first_name})
+        if new_last_name :
+            filter_id(name).update({"last_name": new_last_name})
+            session.query(Contact).filter_by(
+                                            id=int(name[4])).update(
+                                            {"last_name": new_last_name})
+        session.commit()
+    elif update_choice['update'] == 'Phone Number':
+        new_phone_number = input("Enter a new phone number (Press Enter to keep current phone number) ")
+        if new_phone_number:
+            session.query(Contact).filter_by(
+                                            id=int(name[4])).update(
+                                            {"phone_number": new_phone_number})
+        session.commit()
+    elif update_choice['update'] == 'Email':
+        new_email = input("Enter a new email (Press Enter to keep current email) ")
+        if new_email:
+            session.query(Contact).filter_by(
+                                            id=int(name[4])).update(
+                                            {"email": new_email})
+        session.commit()
+    elif update_choice['update'] == 'Postal Address':
+        new_address = input("Enter a new email (Press Enter to keep current email) ")
+        if new_email:
+            session.query(Contact).filter_by(
+                                            id=int(name[4])).update(
+                                            {"email": new_email})
