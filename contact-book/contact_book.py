@@ -44,8 +44,8 @@ if __name__ == '__main__':
         search_results()
 
     # Update contact information
-    elif choice == 'U':
-        pass
+    elif choice.upper() == 'U':
+        update_contact()
 
     # Exit the program.
     elif choice == 'X':
