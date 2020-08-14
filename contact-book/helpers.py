@@ -2,7 +2,8 @@ from models import Base, Contact
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
 from PyInquirer import prompt
-from view import print_all_info, print_header
+from view import print_all_info, print_header, contact_fields
+from tabulate import tabulate
 
 
 def db_connect():
@@ -26,62 +27,11 @@ def db_connect():
 session = db_connect()
 
 
+
 def add_contact():
     """
     Save a new contact to the database.
     """
-    contact_fields = [
-        {
-        'type': 'input',
-        'name': 'first_name',
-        'message': 'First Name: ',
-        },
-        {
-        'type': 'input',
-        'name': 'last_name',
-        'message': 'Last Name: ',
-        },
-        {
-        'type': 'input',
-        'name': 'email',
-        'message': 'Email Address: ',
-        },
-        {
-        'type': 'input',
-        'name': 'phone_number',
-        'message': 'Phone Number: ',
-        },
-        {
-        'type': 'input',
-        'name': 'address_line_1',
-        'message': 'Address Line 1: ',
-        },
-        {
-        'type': 'input',
-        'name': 'address_line_2',
-        'message': 'Address Line 2: ',
-        },
-        {
-        'type': 'input',
-        'name': 'city',
-        'message': 'City: ',
-        },
-        {
-        'type': 'input',
-        'name': 'state',
-        'message': 'State: ',
-        },
-        {
-        'type': 'input',
-        'name': 'zipcode',
-        'message': 'Zipcode: ',
-        },
-        {
-        'type': 'input',
-        'name': 'country',
-        'message': 'Country: ',
-        },
-    ]
     answers = prompt(contact_fields)
     print(answers)
     new_contact = Contact(first_name=answers['first_name'],
@@ -119,9 +69,13 @@ def view_all_entries():
     """
     Views all entries within the database, along with a header.
     """
+    print_list = []
     print_header()
     for instance in session.query(Contact).order_by(Contact.last_name):
+        print_list.append([instance.id, instance.last_name, instance.first_name])
         print_all_info(instance)
+    print(tabulate(print_list, headers=['ID', 'Last Name', 'First Name']))
+
 
 
 def search_results():
@@ -139,6 +93,7 @@ def search_results():
                     trunacted_results.append('ID#:' + str(instance.id) + ' ' +
                                              instance.first_name + ' ' +
                                              instance.last_name)
+
                     print_all_info(instance)
     return trunacted_results
 
@@ -193,49 +148,15 @@ def update_contact():
         {
             'type': 'list',
             'name': 'choose_update',
-            'message': 'Choose the contact that you wish to update:',
+            'message': 'Choose the contact that you wish to update (press Enter to keep current data):',
             'choices': trunacted_results,
         },
     ]
     choice = prompt(results)
     name = choice['choose_update']
-    update_choices = [
-        {
-            'type': 'list',
-            'name': 'update',
-            'message': 'What would you like to change?',
-            'choices': ['Name', 'Phone Number', 'Email',
-                        'Postal Address']
-        }
-    ]
-    update_choice = prompt(update_choices)
-    if update_choice['update'] == 'Name':
-        new_first_name = input("Enter a new first name (Press Enter to keep current name) ")
-        print(new_first_name)
-        new_last_name = input("Enter a new last name (Press Enter to keep current name) ")
-        print(new_last_name)
-        if new_first_name:
-            filter_id(name).update({"first_name": new_first_name})
-        if new_last_name :
-            filter_id(name).update({"last_name": new_last_name})
-        session.commit()
-    elif update_choice['update'] == 'Phone Number':
-        new_phone_number = input("Enter a new phone number (Press Enter to keep current phone number) ")
-        if new_phone_number:
-            session.query(Contact).filter_by(
-                                            id=int(name[4])).update(
-                                            {"phone_number": new_phone_number})
-        session.commit()
-    elif update_choice['update'] == 'Email':
-        new_email = input("Enter a new email (Press Enter to keep current email) ")
-        if new_email:
-            session.query(Contact).filter_by(
-                                            id=int(name[4])).update(
-                                            {"email": new_email})
-        session.commit()
-    elif update_choice['update'] == 'Postal Address':
-        new_address = input("Enter a new email (Press Enter to keep current email) ")
-        if new_email:
-            session.query(Contact).filter_by(
-                                            id=int(name[4])).update(
-                                            {"email": new_email})
+
+    updates = prompt(contact_fields)
+    for k, v in updates.items():
+        if v:
+            filter_id(name).update({k:v})
+            session.commit()
