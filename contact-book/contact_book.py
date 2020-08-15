@@ -3,7 +3,7 @@ from sqlalchemy import or_
 from PyInquirer import prompt
 from models import Base, Contact
 from helpers import *
-from view import print_start_menu, print_header, print_all_info
+from view import print_start_menu, print_all_info
 
 
 if __name__ == '__main__':
