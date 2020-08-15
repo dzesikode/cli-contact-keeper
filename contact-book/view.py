@@ -66,6 +66,6 @@ contact_fields = [
     },
 ]
 
-headers = ['ID', 'Last Name', 'First Name', 'Email', 'Phone Number',
+headers = ['ID', 'First Name', 'Last Name', 'Email', 'Phone Number',
            'Address Line 1', 'Address Line 2', 'City', 'State', 'Zipcode',
            'Country']
