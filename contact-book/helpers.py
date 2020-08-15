@@ -44,7 +44,6 @@ def add_contact():
                           state=answers['state'],
                           zipcode=answers['zipcode'],
                           country=answers['country'])
-    print(new_contact.first_name)
     session.add(new_contact)
     session.commit()
 
@@ -79,47 +78,51 @@ def view_all_entries():
     print(tabulate(print_list, headers=headers))
 
 
-
 def search_results():
     """
     Displays results based on the search query, along with a header.
     """
     search_query = search_prompt()
-    trunacted_results = []
+    print_list = []
     for instance in session.query(Contact).filter(
                      or_(
                      (Contact.last_name.ilike(f'%{search_query}%')),
                      (Contact.first_name.ilike(f'%{search_query}%'))
                 )):
-                    trunacted_results.append(['ID#:' + str(instance.id) + ' ' +
-                                             instance.first_name + ' ' +
-                                             instance.last_name])
+                    print_list.append([instance.id, instance.last_name,
+                                       instance.first_name, instance.email,
+                                       instance.phone_number,
+                                       instance.address_line_1,
+                                       instance.address_line_2,
+                                       instance.city, instance.state,
+                                       instance.zipcode, instance.country])
 
-                    print_all_info(instance)
-    print(tabulate(trunacted_results, headers=headers))
-    return trunacted_results
-
-
-def filter_id(name):
-    filter_id = session.query(Contact).filter_by(id=int(name[4]))
-    return filter_id
+    print(tabulate(print_list, headers=headers))
+    return print_list
 
 
 def delete_contact():
     """
     Removes the specified contact from the database.
     """
-    trunacted_results = search_results()
+    print_list = search_results()
+    name_list = []
+    for i in print_list:
+        first_name = i[2]
+        last_name = i[1]
+        full_name = f"{first_name} {last_name}"
+        name_list.append(full_name)
     results = [
         {
             'type': 'list',
             'name': 'choose_delete',
             'message': 'Choose the contact that you wish to delete:',
-            'choices': trunacted_results,
+            'choices': name_list,
         },
     ]
     choice = prompt(results)
     name = choice['choose_delete']
+    delete_first_name, delete_last_name = name.split()
 
     delete_confirmation = [
         {
@@ -132,7 +135,8 @@ def delete_contact():
     confirmation = prompt(delete_confirmation)
     if confirmation['delete_contact'] == True:
         try:
-            session.query(Contact).filter_by(id=int(name[4])).delete()
+            session.query(Contact).filter_by(first_name=delete_first_name,
+                                             last_name=delete_last_name).delete()
             session.commit()
             print("Contact successfully deleted.")
         except Exception:
@@ -145,20 +149,29 @@ def update_contact():
     """
     Updates contact information.
     """
-    trunacted_results = search_results()
+    print_list = search_results()
+    name_list = []
+    for i in print_list:
+        first_name = i[2]
+        last_name = i[1]
+        full_name = f"{first_name} {last_name}"
+        name_list.append(full_name)
     results = [
         {
             'type': 'list',
             'name': 'choose_update',
             'message': 'Choose the contact that you wish to update (press Enter to keep current data):',
-            'choices': trunacted_results,
+            'choices': name_list,
         },
     ]
     choice = prompt(results)
     name = choice['choose_update']
+    update_first_name, update_last_name = name.split()
 
     updates = prompt(contact_fields)
+    print(updates)
     for k, v in updates.items():
         if v:
-            filter_id(name).update({k:v})
-            session.commit()
+            session.query(Contact).filter_by(first_name=update_first_name,
+                                             last_name=update_last_name).update({k:v})
+    session.commit()
