@@ -54,6 +54,10 @@ contact_fields = [
     },
 ]
 
+headers = ['ID', 'Last Name', 'First Name', 'Email', 'Phone Number',
+           'Address Line 1', 'Address Line 2', 'City', 'State', 'Zipcode',
+           'Country']
+
 def print_start_menu():
     START_MENU_CHOICES = ['V', 'A', 'D', 'S', 'U', 'X']
 
@@ -66,18 +70,6 @@ def print_start_menu():
 
     print('---------------Contact Book---------------')
     print(start_menu)
-
-def print_header():
-    """
-    Prints the header for the UI when viewing a contact.
-    """
-    print('ID'.center(3), 'Last Name'.center(31), 'First Name'.center(20),
-          'Phone Number'.center(20), 'Email'.center(30), 'Address Line 1'.center(30),
-          'Address Line 2'.center(20), 'City'.center(20), 'State'.center(15),
-          'ZIP'.center(10), 'Country'.center(20))
-    # print(tabulate([['ID', 'Last Name', 'First Name',
-    # 'Phone Number', 'Email', 'Address Line 1', 'Address Line 2',
-    # 'City', 'State', 'ZIP', 'Country']]))
 
 
 def print_all_info(instance):
