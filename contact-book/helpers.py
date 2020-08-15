@@ -2,7 +2,7 @@ from models import Base, Contact
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
 from PyInquirer import prompt
-from view import *
+from view import contact_fields, headers
 from tabulate import tabulate
 
 
@@ -33,7 +33,6 @@ def add_contact():
     Save a new contact to the database.
     """
     answers = prompt(contact_fields)
-    print(answers)
     new_contact = Contact(first_name=answers['first_name'],
                           last_name=answers['last_name'],
                           email=answers['email'],
@@ -59,14 +58,13 @@ def search_prompt():
         'message': 'Enter a name: ',
         },
     ]
-    search_prompt = prompt(search_field)
-    search_query = search_prompt['search']
+    search_query = prompt(search_field)['search']
     return search_query
 
 
 def view_all_entries():
     """
-    Views all entries within the database, along with a header.
+    Views all entries within the database, along with headers.
     """
     print_list = []
     for instance in session.query(Contact).order_by(Contact.last_name):
