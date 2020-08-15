@@ -2,7 +2,7 @@ from models import Base, Contact
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
 from PyInquirer import prompt
-from view import print_all_info, print_header, contact_fields
+from view import *
 from tabulate import tabulate
 
 
@@ -70,11 +70,13 @@ def view_all_entries():
     Views all entries within the database, along with a header.
     """
     print_list = []
-    print_header()
     for instance in session.query(Contact).order_by(Contact.last_name):
-        print_list.append([instance.id, instance.last_name, instance.first_name])
-        print_all_info(instance)
-    print(tabulate(print_list, headers=['ID', 'Last Name', 'First Name']))
+        print_list.append([instance.id, instance.last_name, instance.first_name,
+                           instance.email, instance.phone_number,
+                           instance.address_line_1, instance.address_line_2,
+                           instance.city, instance.state, instance.zipcode,
+                           instance.country])
+    print(tabulate(print_list, headers=headers))
 
 
 
@@ -84,17 +86,17 @@ def search_results():
     """
     search_query = search_prompt()
     trunacted_results = []
-    print_header()
     for instance in session.query(Contact).filter(
                      or_(
                      (Contact.last_name.ilike(f'%{search_query}%')),
                      (Contact.first_name.ilike(f'%{search_query}%'))
                 )):
-                    trunacted_results.append('ID#:' + str(instance.id) + ' ' +
+                    trunacted_results.append(['ID#:' + str(instance.id) + ' ' +
                                              instance.first_name + ' ' +
-                                             instance.last_name)
+                                             instance.last_name])
 
                     print_all_info(instance)
+    print(tabulate(trunacted_results, headers=headers))
     return trunacted_results
 
 
