@@ -70,7 +70,7 @@ def view_all_entries():
     """
     print_list = []
     for instance in session.query(Contact).order_by(Contact.last_name):
-        print_list.append([instance.id, instance.last_name, instance.first_name,
+        print_list.append([instance.id, instance.first_name, instance.last_name,
                            instance.email, instance.phone_number,
                            instance.address_line_1, instance.address_line_2,
                            instance.city, instance.state, instance.zipcode,
@@ -89,8 +89,8 @@ def search_results():
                      (Contact.last_name.ilike(f'%{search_query}%')),
                      (Contact.first_name.ilike(f'%{search_query}%'))
                 )):
-                    print_list.append([instance.id, instance.last_name,
-                                       instance.first_name, instance.email,
+                    print_list.append([instance.id, instance.first_name,
+                                       instance.last_name, instance.email,
                                        instance.phone_number,
                                        instance.address_line_1,
                                        instance.address_line_2,
@@ -106,12 +106,11 @@ def delete_contact():
     Removes the specified contact from the database.
     """
     print_list = search_results()
-    name_list = []
-    for i in print_list:
-        first_name = i[2]
-        last_name = i[1]
-        full_name = f"{first_name} {last_name}"
-        name_list.append(full_name)
+
+    # Create a list showing just the first and last name for each contact from
+    # the search results
+    name_list = [f"{i[1]} {i[2]}" for i in print_list]
+
     results = [
         {
             'type': 'list',
@@ -120,20 +119,18 @@ def delete_contact():
             'choices': name_list,
         },
     ]
-    choice = prompt(results)
-    name = choice['choose_delete']
-    delete_first_name, delete_last_name = name.split()
+    # Get the first and last name from the user's choice
+    delete_first_name, delete_last_name = prompt(results)['choose_delete'].split()
 
     delete_confirmation = [
         {
             'type': 'confirm',
-            'message': f'Are you sure you want to delete {name} from the contact book?',
+            'message': f'Are you sure you want to delete {delete_first_name} {delete_last_name} from the contact book?',
             'name': 'delete_contact',
             'default': False,
         }
     ]
-    confirmation = prompt(delete_confirmation)
-    if confirmation['delete_contact'] == True:
+    if prompt(delete_confirmation)['delete_contact'] == True:
         try:
             session.query(Contact).filter_by(first_name=delete_first_name,
                                              last_name=delete_last_name).delete()
@@ -150,26 +147,25 @@ def update_contact():
     Updates contact information.
     """
     print_list = search_results()
-    name_list = []
-    for i in print_list:
-        first_name = i[2]
-        last_name = i[1]
-        full_name = f"{first_name} {last_name}"
-        name_list.append(full_name)
+
+    # Create a list showing just the first and last name for each contact from
+    # the search results
+    name_list = [f"{i[1]} {i[2]}" for i in print_list]
     results = [
         {
             'type': 'list',
             'name': 'choose_update',
             'message': 'Choose the contact that you wish to update (press Enter to keep current data):',
-            'choices': name_list,
+            'choices': name_list
         },
     ]
-    choice = prompt(results)
-    name = choice['choose_update']
-    update_first_name, update_last_name = name.split()
+
+    # Get the first and last name from the user's choice
+    update_first_name, update_last_name = prompt(results)['choose_update'].split()
 
     updates = prompt(contact_fields)
-    print(updates)
+
+    # Commit any filled-in fields to the database
     for k, v in updates.items():
         if v:
             session.query(Contact).filter_by(first_name=update_first_name,
