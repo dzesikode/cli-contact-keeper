@@ -1,9 +1,7 @@
 from __future__ import print_function, unicode_literals
-from sqlalchemy import or_
 from PyInquirer import prompt
-from models import Base, Contact
 from helpers import *
-from view import print_start_menu, print_all_info
+from view import print_start_menu
 
 
 if __name__ == '__main__':
@@ -49,4 +47,4 @@ if __name__ == '__main__':
 
     # Exit the program.
     elif choice == 'X':
-        pass
+        exit()
