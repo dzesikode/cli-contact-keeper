@@ -1,50 +1,61 @@
-from __future__ import print_function, unicode_literals
-from PyInquirer import prompt
 from helpers import *
-from view import print_start_menu
+from view import menu_prompt, start_menu_prompt
 
 
 if __name__ == '__main__':
-    print_start_menu()
-
-    choice = input()
+    selection = start_menu_prompt()
 
     session = db_connect()
 
-    # View all entries
-    if choice.upper() == 'V':
-        view_all_entries()
-
     # Add a new contact
-    elif choice.upper() == 'A':
-        add_contact()
+    if selection.startswith("Add"):
         while True:
-            add_another = [
-                {
-                'type': 'confirm',
-                'message': 'Would you like to add another contact?',
-                'name': 'add_another',
-                'default': True,
-                },
-            ]
-            answer = prompt(add_another)
-            if answer['add_another'] == False:
+            add_contact()
+            selection = menu_prompt("Add")
+            if selection.startswith("Return"):
+                pass
                 break
             else:
-                add_contact()
+                continue
 
     # Delete a contact
-    elif choice.upper() == 'D':
-        delete_contact()
+    elif selection.startswith("Delete"):
+        while True:
+            delete_contact()
+            selection = menu_prompt("Delete")
+            if selection.startswith("Return"):
+                pass
+                break
+            else:
+                continue
 
     # Search the contact book
-    elif choice.upper() == 'S':
-        search_results()
+    elif selection.startswith("Search"):
+        while True:
+            search_results()
+            selection = menu_prompt("Search for")
+            if selection.startswith("Return"):
+                pass
+                break
+            else:
+                continue
+
 
     # Update contact information
-    elif choice.upper() == 'U':
-        update_contact()
+    elif selection.startswith("Update"):
+        while True:
+            update_contact()
+            selection = menu_prompt("Update")
+            if selection.startswith("Return"):
+                pass
+                break
+            else:
+                continue
+
+    # View all entries
+    elif selection.startswith("View"):
+        view_all_entries()
 
     # Exit the program.
-    elif choice == 'X':
+    elif selection.startswith("Exit"):
         exit()
