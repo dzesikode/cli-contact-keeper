@@ -74,13 +74,13 @@ headers = ['First Name', 'Last Name', 'Email', 'Phone Number',
            'Country']
 
 def menu_prompt(option):
-    menu_options = [" another contact", "Return to the main menu"]
+    menu_options = [" another contact", "Return to the main menu", "Exit the program"]
     menu_prompt = [
         {
             'type': 'list',
             'name': 'menu_options',
             'message': 'What do you want to do?',
-            'choices': [option + menu_options[0], menu_options[1]]
+            'choices': [option + menu_options[0], menu_options[1], menu_options[2]]
         }
     ]
     selection = prompt(menu_prompt)['menu_options']
