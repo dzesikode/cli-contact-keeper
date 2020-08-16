@@ -1,17 +1,20 @@
+from __future__ import print_function, unicode_literals
+from PyInquirer import prompt
 
-
-def print_start_menu():
-    START_MENU_CHOICES = ['V', 'A', 'D', 'S', 'U', 'X']
-
-    start_menu = ("[V] -- View all entries\n"
-                  "[A] -- Add new contact\n"
-                  "[D] -- Delete a contact\n"
-                  "[S] -- Search the address book\n"
-                  "[U] -- Update contact information\n"
-                  "[X] -- Exit the program\n")
-
-    print('---------------Contact Book---------------')
-    print(start_menu)
+def start_menu_prompt():
+    START_MENU_CHOICES = ['Add a new contact', 'Delete a contact',
+                          'Search the address book', 'Update contact information',
+                          'View all entries', 'Exit the program']
+    start_menu_prompt = [
+        {
+            'type': 'list',
+            'name': 'start_menu',
+            'message': 'Contact Book',
+            'choices': START_MENU_CHOICES
+        }
+    ]
+    selection = prompt(start_menu_prompt)['start_menu']
+    return selection
 
 contact_fields = [
     {
@@ -66,6 +69,19 @@ contact_fields = [
     },
 ]
 
-headers = ['ID', 'First Name', 'Last Name', 'Email', 'Phone Number',
+headers = ['First Name', 'Last Name', 'Email', 'Phone Number',
            'Address Line 1', 'Address Line 2', 'City', 'State', 'Zipcode',
            'Country']
+
+def menu_prompt(option):
+    menu_options = [" another contact", "Return to the main menu"]
+    menu_prompt = [
+        {
+            'type': 'list',
+            'name': 'menu_options',
+            'message': 'What do you want to do?',
+            'choices': [option + menu_options[0], menu_options[1]]
+        }
+    ]
+    selection = prompt(menu_prompt)['menu_options']
+    return selection
