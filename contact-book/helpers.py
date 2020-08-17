@@ -107,67 +107,76 @@ def delete_contact():
     """
     print_list = search_results()
 
-    # Create a list showing just the first and last name for each contact from
+    # Create a list showing just the id and first and last name for each contact from
     # the search results
-    name_list = [f"{i[1]} {i[2]}" for i in print_list]
+    if print_list != []:
+        name_list = [f"{i[0]}   {i[1]} {i[2]}" for i in print_list]
 
-    results = [
-        {
-            'type': 'list',
-            'name': 'choose_delete',
-            'message': 'Choose the contact that you wish to delete:',
-            'choices': name_list,
-        },
-    ]
-    # Get the first and last name from the user's choice
-    delete_first_name, delete_last_name = prompt(results)['choose_delete'].split()
+        delete_prompt = [
+            {
+                'type': 'list',
+                'name': 'choose_delete',
+                'message': 'Choose the contact that you wish to delete:',
+                'choices': name_list,
+            },
+        ]
+        results = prompt(delete_prompt)['choose_delete'].split()
+        if len(results) == 3:
+            delete_id, delete_firstname, delete_lastname = results
+            identifier = delete_firstname + ' ' + delete_lastname
+        elif len(results) == 2:
+            delete_id, delete_name = results
+            identifier = delete_name
+        elif len(results) == 1:
+            delete_id = results[0]
+            identifier = delete_id
+        # Get the first and last name from the user's choice
+        delete_confirmation = [
+            {
+                'type': 'confirm',
+                'message': f'Are you sure you want to delete {identifier} from the contact book?',
+                'name': 'delete_contact',
+                'default': False,
+            }
+        ]
 
-    delete_confirmation = [
-        {
-            'type': 'confirm',
-            'message': f'Are you sure you want to delete {delete_first_name} {delete_last_name} from the contact book?',
-            'name': 'delete_contact',
-            'default': False,
-        }
-    ]
-    if prompt(delete_confirmation)['delete_contact'] == True:
-        try:
-            session.query(Contact).filter_by(first_name=delete_first_name,
-                                             last_name=delete_last_name).delete()
-            session.commit()
-            print("Contact successfully deleted.")
-        except Exception:
-            print("An error occured.")
+        if prompt(delete_confirmation)['delete_contact'] == True:
+                session.query(Contact).filter_by(id=delete_id).delete()
+                session.commit()
+                print("Contact successfully deleted.")
+                print("An error occured.")
+        else:
+            print("Operation cancelled.")
     else:
-        print("Operation cancelled.")
-
+        pass
 
 def update_contact():
     """
     Updates contact information.
     """
     print_list = search_results()
+    if print_list != []:
+        # Create a list showing just the first and last name for each contact from
+        # the search results
+        name_list = [f"{i[0]}   {i[1]} {i[2]}" for i in print_list]
 
-    # Create a list showing just the first and last name for each contact from
-    # the search results
-    name_list = [f"{i[1]} {i[2]}" for i in print_list]
-    results = [
-        {
-            'type': 'list',
-            'name': 'choose_update',
-            'message': 'Choose the contact that you wish to update (press Enter to keep current data):',
-            'choices': name_list
-        },
-    ]
+        update_prompt = [
+            {
+                'type': 'list',
+                'name': 'choose_update',
+                'message': 'Choose the contact that you wish to update (press Enter to keep current data):',
+                'choices': name_list
+            },
+        ]
+        results = prompt(update_prompt)['choose_update'].split()
+        update_id = results[0]
 
-    # Get the first and last name from the user's choice
-    update_first_name, update_last_name = prompt(results)['choose_update'].split()
+        updates = prompt(contact_fields)
 
-    updates = prompt(contact_fields)
-
-    # Commit any filled-in fields to the database
-    for k, v in updates.items():
-        if v:
-            session.query(Contact).filter_by(first_name=update_first_name,
-                                             last_name=update_last_name).update({k:v})
-    session.commit()
+        # Commit any filled-in fields to the database
+        for k, v in updates.items():
+            if v:
+                session.query(Contact).filter_by(id=update_id).update({k:v})
+        session.commit()
+    else:
+        pass
