@@ -83,19 +83,21 @@ def search_results():
     search_query = search_prompt()
     print_list = []
     for instance in session.query(Contact).filter(
-                     or_(
-                     (Contact.last_name.ilike(f'%{search_query}%')),
-                     (Contact.first_name.ilike(f'%{search_query}%'))
-                )):
-                    print_list.append([instance.id, instance.first_name,
-                                       instance.last_name, instance.email,
-                                       instance.phone_number,
-                                       instance.address_line_1,
-                                       instance.address_line_2,
-                                       instance.city, instance.state,
-                                       instance.zipcode, instance.country])
-
-    print(tabulate(print_list, headers=headers))
+    or_(
+    (Contact.last_name.ilike(f'%{search_query}%')),
+    (Contact.first_name.ilike(f'%{search_query}%')))):
+        print_list.append([instance.id, instance.first_name,
+                           instance.last_name, instance.email,
+                           instance.phone_number,
+                           instance.address_line_1,
+                           instance.address_line_2,
+                           instance.city, instance.state,
+                           instance.zipcode, instance.country])
+    if print_list == []:
+        print("No results found.")
+    else:
+        print(tabulate(print_list, headers=headers))
+        print('\n')
     return print_list
 
 
