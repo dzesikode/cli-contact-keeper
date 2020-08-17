@@ -69,7 +69,7 @@ contact_fields = [
     },
 ]
 
-headers = ['First Name', 'Last Name', 'Email', 'Phone Number',
+headers = ['#', 'First Name', 'Last Name', 'Email', 'Phone Number',
            'Address Line 1', 'Address Line 2', 'City', 'State', 'Zipcode',
            'Country']
 
