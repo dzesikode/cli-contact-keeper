@@ -55,7 +55,7 @@ def search_prompt():
         {
         'type': 'input',
         'name': 'search',
-        'message': 'Enter a name: ',
+        'message': 'Enter a search term: ',
         },
     ]
     search_query = prompt(search_field)['search']
