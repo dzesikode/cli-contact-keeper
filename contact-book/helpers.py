@@ -68,7 +68,7 @@ def view_all_entries():
     """
     print_list = []
     for instance in session.query(Contact).order_by(Contact.last_name):
-        print_list.append([instance.first_name, instance.last_name,
+        print_list.append([instance.id, instance.first_name, instance.last_name,
                            instance.email, instance.phone_number,
                            instance.address_line_1, instance.address_line_2,
                            instance.city, instance.state, instance.zipcode,
