@@ -73,7 +73,7 @@ def view_all_entries():
                            instance.address_line_1, instance.address_line_2,
                            instance.city, instance.state, instance.zipcode,
                            instance.country])
-    print(tabulate(print_list, headers=headers))
+    print(tabulate(print_list, headers=headers, tablefmt="fancy_grid"))
 
 
 def search_results():
@@ -96,7 +96,7 @@ def search_results():
     if print_list == []:
         print("No results found.")
     else:
-        print(tabulate(print_list, headers=headers))
+        print(tabulate(print_list, headers=headers, tablefmt="fancy_grid"))
         print('\n')
     return print_list
 
