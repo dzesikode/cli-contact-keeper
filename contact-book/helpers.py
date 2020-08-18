@@ -2,7 +2,7 @@ from models import Base, Contact
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
 from PyInquirer import prompt
-from view import contact_fields, headers
+from view import contact_fields, headers, print_list_func
 from tabulate import tabulate
 
 
@@ -43,9 +43,12 @@ def add_contact():
                           state=answers['state'],
                           zipcode=answers['zipcode'],
                           country=answers['country'])
-    session.add(new_contact)
-    session.commit()
-
+    try:
+        session.add(new_contact)
+        session.commit()
+        print("New contact successfully added.")
+    except Exception:
+        print("An unexpected error occured.")
 
 def search_prompt():
     """
@@ -68,12 +71,9 @@ def view_all_entries():
     """
     print_list = []
     for instance in session.query(Contact).order_by(Contact.last_name):
-        print_list.append([instance.id, instance.first_name, instance.last_name,
-                           instance.email, instance.phone_number,
-                           instance.address_line_1, instance.address_line_2,
-                           instance.city, instance.state, instance.zipcode,
-                           instance.country])
+        print_list = print_list_func(instance, print_list)
     print(tabulate(print_list, headers=headers, tablefmt="fancy_grid"))
+    print('\n')
 
 
 def search_results():
@@ -86,15 +86,9 @@ def search_results():
     or_(
     (Contact.last_name.ilike(f'%{search_query}%')),
     (Contact.first_name.ilike(f'%{search_query}%')))):
-        print_list.append([instance.id, instance.first_name,
-                           instance.last_name, instance.email,
-                           instance.phone_number,
-                           instance.address_line_1,
-                           instance.address_line_2,
-                           instance.city, instance.state,
-                           instance.zipcode, instance.country])
+        print_list = print_list_func(instance, print_list)
     if print_list == []:
-        print("No results found.")
+        print("No results found.\n")
     else:
         print(tabulate(print_list, headers=headers, tablefmt="fancy_grid"))
         print('\n')
@@ -180,5 +174,6 @@ def update_contact():
             if v:
                 session.query(Contact).filter_by(id=update_id).update({k:v})
         session.commit()
+        print("Contact successfully updated.")
     else:
         pass
