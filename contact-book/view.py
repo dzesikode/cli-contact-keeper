@@ -1,5 +1,6 @@
 from __future__ import print_function, unicode_literals
 from PyInquirer import prompt
+from tabulate import tabulate
 
 def start_menu_prompt():
     START_MENU_CHOICES = ['Add a new contact', 'Delete a contact',
@@ -85,3 +86,13 @@ def menu_prompt(option):
     ]
     selection = prompt(menu_prompt)['menu_options']
     return selection
+
+def print_list_func(instance, print_list):
+    print_list.append([instance.id, instance.first_name,
+                       instance.last_name, instance.email,
+                       instance.phone_number,
+                       instance.address_line_1,
+                       instance.address_line_2,
+                       instance.city, instance.state,
+                       instance.zipcode, instance.country])
+    return print_list
