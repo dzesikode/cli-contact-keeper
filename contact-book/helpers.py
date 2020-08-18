@@ -141,10 +141,12 @@ def delete_contact():
         ]
 
         if prompt(delete_confirmation)['delete_contact'] == True:
+            try:
                 session.query(Contact).filter_by(id=delete_id).delete()
                 session.commit()
                 print("Contact successfully deleted.")
-                print("An error occured.")
+            except Exception:
+                print("An unexpected error occured.")
         else:
             print("Operation cancelled.")
     else:
