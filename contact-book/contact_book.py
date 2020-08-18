@@ -60,6 +60,7 @@ if __name__ == '__main__':
         # View all entries
         elif selection.startswith("View"):
             view_all_entries()
+            continue
 
         # Exit the program.
         elif selection.startswith("Exit"):
