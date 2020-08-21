@@ -7,6 +7,10 @@ from tabulate import tabulate
 
 
 def start_menu_prompt():
+    """
+    Displays the first prompt the user sees when starting the program. Returns
+    the user's selection from the choices listed below.
+    """
     START_MENU_CHOICES = ['Add a new contact', 'Delete a contact',
                           'Search the address book',
                           'Update contact information', 'View all entries',
@@ -23,6 +27,7 @@ def start_menu_prompt():
     return selection
 
 
+# A list of prompts used when adding a new contact or updating one.
 contact_fields = [
     {
         'type': 'input',
@@ -76,12 +81,18 @@ contact_fields = [
     },
 ]
 
+# Headers which display above the list of contacts in the search function or
+# when viewing all entries.
 headers = ['#', 'First Name', 'Last Name', 'Email', 'Phone Number',
            'Address Line 1', 'Address Line 2', 'City', 'State', 'Zipcode',
            'Country']
 
 
 def menu_prompt(option):
+    """
+    Secondary menu prompt. Displays after a user has completed an action.
+    Returns the user's selection from the choices listed below.
+    """
     menu_options = [" another contact", "Return to the main menu",
                     "Exit the program"]
     menu_prompt = [
@@ -98,6 +109,11 @@ def menu_prompt(option):
 
 
 def print_list_func(instance, print_list):
+    """
+    Takes in an instance and an empty list as arguments and returns a list of
+    instance information. Used for display when searching the contact book or
+    viewing all entries.
+    """
     print_list.append([instance.id, instance.first_name,
                        instance.last_name, instance.email,
                        instance.phone_number,
