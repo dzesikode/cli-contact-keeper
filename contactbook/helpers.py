@@ -27,8 +27,9 @@ def db_connect():
     session = Session()
 
     return session
-session = db_connect()
 
+
+session = db_connect()
 
 
 def add_contact():
@@ -53,15 +54,16 @@ def add_contact():
     except Exception:
         print("An unexpected error occured.")
 
+
 def search_prompt():
     """
     Prompt that returns a search query for use with querying the database
     """
     search_field = [
         {
-        'type': 'input',
-        'name': 'search',
-        'message': 'Enter a search term: ',
+            'type': 'input',
+            'name': 'search',
+            'message': 'Enter a search term: ',
         },
     ]
     search_query = prompt(search_field)['search']
@@ -86,9 +88,9 @@ def search_results():
     search_query = search_prompt()
     print_list = []
     for instance in session.query(Contact).filter(
-    or_(
-    (Contact.last_name.ilike(f'%{search_query}%')),
-    (Contact.first_name.ilike(f'%{search_query}%')))):
+                        or_(
+                            (Contact.last_name.ilike(f'%{search_query}%')),
+                            (Contact.first_name.ilike(f'%{search_query}%')))):
         print_list = print_list_func(instance, print_list)
     if print_list == []:
         print("No results found.\n")
@@ -104,8 +106,8 @@ def delete_contact():
     """
     print_list = search_results()
 
-    # Create a list showing just the id and first and last name for each contact from
-    # the search results
+    # Create a list showing just the id and first and last name for each
+    # contact from the search results
     if print_list != []:
         name_list = [f"{i[0]}   {i[1]} {i[2]}" for i in print_list]
 
@@ -134,13 +136,14 @@ def delete_contact():
         delete_confirmation = [
             {
                 'type': 'confirm',
-                'message': f'Are you sure you want to delete {identifier} from the contact book?',
+                'message': f'Are you sure you want to delete {identifier} from'
+                            ' the contact book?',
                 'name': 'delete_contact',
                 'default': False,
             }
         ]
 
-        if prompt(delete_confirmation)['delete_contact'] == True:
+        if prompt(delete_confirmation)['delete_contact'] is True:
             try:
                 session.query(Contact).filter_by(id=delete_id).delete()
                 session.commit()
@@ -152,21 +155,23 @@ def delete_contact():
     else:
         pass
 
+
 def update_contact():
     """
     Updates contact information.
     """
     print_list = search_results()
     if print_list != []:
-        # Create a list showing just the first and last name for each contact from
-        # the search results
+        # Create a list showing just the first and last name for each contact
+        # from the search results
         name_list = [f"{i[0]}   {i[1]} {i[2]}" for i in print_list]
 
         update_prompt = [
             {
                 'type': 'list',
                 'name': 'choose_update',
-                'message': 'Choose the contact that you wish to update (press Enter to keep current data):',
+                'message': 'Choose the contact that you wish to update'
+                           ' (press Enter to keep current data):',
                 'choices': name_list
             },
         ]
@@ -178,7 +183,7 @@ def update_contact():
         # Commit any filled-in fields to the database
         for k, v in updates.items():
             if v:
-                session.query(Contact).filter_by(id=update_id).update({k:v})
+                session.query(Contact).filter_by(id=update_id).update({k: v})
         session.commit()
         print("Contact successfully updated.")
     else:

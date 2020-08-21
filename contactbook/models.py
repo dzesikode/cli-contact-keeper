@@ -6,12 +6,13 @@ from sqlalchemy import Sequence, Column, Integer, String
 
 Base = declarative_base()
 
+
 class Contact(Base):
 
     __tablename__ = 'contacts'
 
     fields = ['last_name', 'first_name', 'address_line_1', 'address_line_2',
-             'city', 'state', 'zipcode', 'country', 'phone_number', 'email']
+              'city', 'state', 'zipcode', 'country', 'phone_number', 'email']
 
     id = Column(Integer, Sequence('contact_id_seq'), primary_key=True)
     last_name = Column(String)

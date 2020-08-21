@@ -47,7 +47,6 @@ if __name__ == '__main__':
                 else:
                     continue
 
-
         # Update contact information
         elif selection.startswith("Update"):
             while True:
