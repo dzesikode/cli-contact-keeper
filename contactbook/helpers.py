@@ -23,7 +23,7 @@ def db_connect():
     Session = sessionmaker(bind=engine)
     Session.configure(bind=engine)
 
-    # Instantiate when you need to connect with the database
+    # Instantiate session when needed to connect to the database
     session = Session()
 
     return session
