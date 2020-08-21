@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from helpers import *
 from view import menu_prompt, start_menu_prompt
 

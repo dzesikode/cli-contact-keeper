@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from models import Base, Contact
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
