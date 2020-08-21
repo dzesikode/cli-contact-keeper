@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from helpers import *
+from helpers import db_connect, add_contact, delete_contact, search_results, \
+                    update_contact, view_all_entries
 from view import menu_prompt, start_menu_prompt
 
 
