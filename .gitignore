@@ -1,3 +1,5 @@
-contact-book/contact_book.db
-contact-book/__pycache__
+contactbook/contact_book.db
+contactbook/__pycache__
 .env
+contactbook/.pytest_cache
+contactbook/tests/__pycache__

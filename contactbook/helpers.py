@@ -115,7 +115,10 @@ def delete_contact():
             },
         ]
         results = prompt(delete_prompt)['choose_delete'].split()
-        if len(results) == 3:
+        if len(results) > 3:
+            delete_id = results[0]
+            identifier = results[1:]
+        elif len(results) == 3:
             delete_id, delete_firstname, delete_lastname = results
             identifier = delete_firstname + ' ' + delete_lastname
         elif len(results) == 2:
