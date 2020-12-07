@@ -97,7 +97,7 @@ def add_contact():
     """
     Save a new contact to the database.
     """
-    answers = prompt(contact_fields)
+    answers = prompt(CONTACT_FIELDS)
     new_contact = Contact(first_name=answers['first_name'],
                           last_name=answers['last_name'],
                           email=answers['email'],
@@ -138,7 +138,7 @@ def view_all_entries():
     print_list = []
     for instance in session.query(Contact).order_by(Contact.last_name):
         print_list = print_list_func(instance, print_list)
-    print(tabulate(print_list, headers=headers, tablefmt="fancy_grid"))
+    print(tabulate(print_list, headers=HEADERS, tablefmt="fancy_grid"))
     print('\n')
 
 
@@ -156,7 +156,7 @@ def search_results():
     if print_list == []:
         print("No results found.\n")
     else:
-        print(tabulate(print_list, headers=headers, tablefmt="fancy_grid"))
+        print(tabulate(print_list, headers=HEADERS, tablefmt="fancy_grid"))
         print('\n')
     return print_list
 
@@ -239,7 +239,7 @@ def update_contact():
         results = prompt(update_prompt)['choose_update'].split()
         update_id = results[0]
 
-        updates = prompt(contact_fields)
+        updates = prompt(CONTACT_FIELDS)
 
         # Commit any filled-in fields to the database
         for k, v in updates.items():
