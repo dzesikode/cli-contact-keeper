@@ -27,67 +27,6 @@ def start_menu_prompt():
     return selection
 
 
-# A list of prompts used when adding a new contact or updating one.
-contact_fields = [
-    {
-        'type': 'input',
-        'name': 'first_name',
-        'message': 'First Name: ',
-    },
-    {
-        'type': 'input',
-        'name': 'last_name',
-        'message': 'Last Name: ',
-    },
-    {
-        'type': 'input',
-        'name': 'email',
-        'message': 'Email Address: ',
-    },
-    {
-        'type': 'input',
-        'name': 'phone_number',
-        'message': 'Phone Number: ',
-    },
-    {
-        'type': 'input',
-        'name': 'address_line_1',
-        'message': 'Address Line 1: ',
-    },
-    {
-        'type': 'input',
-        'name': 'address_line_2',
-        'message': 'Address Line 2: ',
-    },
-    {
-        'type': 'input',
-        'name': 'city',
-        'message': 'City: ',
-    },
-    {
-        'type': 'input',
-        'name': 'state',
-        'message': 'State: ',
-    },
-    {
-        'type': 'input',
-        'name': 'zipcode',
-        'message': 'Zipcode: ',
-    },
-    {
-        'type': 'input',
-        'name': 'country',
-        'message': 'Country: ',
-    },
-]
-
-# Headers which display above the list of contacts in the search function or
-# when viewing all entries.
-headers = ['#', 'First Name', 'Last Name', 'Email', 'Phone Number',
-           'Address Line 1', 'Address Line 2', 'City', 'State', 'Zipcode',
-           'Country']
-
-
 def menu_prompt(option):
     """
     Secondary menu prompt. Displays after a user has completed an action.
