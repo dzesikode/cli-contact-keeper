@@ -107,17 +107,21 @@ def menu_prompt(option):
     return selection
 
 
+def display_results(print_list, headers=HEADERS, tablefmt='fancy_grid'):
+    print(tabulate(print_list, headers, tablefmt))
+    print('\n')
+    return print_list
+
+
 def print_list_func(instance, print_list):
     """
     Takes in an instance and an empty list as arguments and returns a list of
     instance information. Used for display when searching the contact book or
     viewing all entries.
     """
-    print_list.append([instance.id, instance.first_name,
-                       instance.last_name, instance.email,
-                       instance.phone_number,
-                       instance.address_line_1,
-                       instance.address_line_2,
-                       instance.city, instance.state,
-                       instance.zipcode, instance.country])
+    print_list.append([instance.id, instance.first_name, instance.last_name,
+                       instance.email, instance.phone_number,
+                       instance.address_line_1, instance.address_line_2,
+                       instance.city, instance.state, instance.zipcode,
+                       instance.country])
     return print_list

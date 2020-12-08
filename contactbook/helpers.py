@@ -77,8 +77,7 @@ def view_all_entries():
     print_list = []
     for instance in session.query(Contact).order_by(Contact.last_name):
         print_list = print_list_func(instance, print_list)
-    print(tabulate(print_list, headers=HEADERS, tablefmt="fancy_grid"))
-    print('\n')
+    display_results(print_list)
 
 
 def search_results():
@@ -95,8 +94,7 @@ def search_results():
     if print_list == []:
         print("No results found.\n")
     else:
-        print(tabulate(print_list, headers=HEADERS, tablefmt="fancy_grid"))
-        print('\n')
+        display_results(print_list)
     return print_list
 
 
