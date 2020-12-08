@@ -5,69 +5,8 @@ from models import Base, Contact
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
 from PyInquirer import prompt
-from view import print_list_func
+from view import print_list_func, display_results, CONTACT_FIELDS, HEADERS
 from tabulate import tabulate
-
-
-# A list of prompts used when adding a new contact or updating one.
-CONTACT_FIELDS = [
-    {
-        'type': 'input',
-        'name': 'first_name',
-        'message': 'First Name: ',
-    },
-    {
-        'type': 'input',
-        'name': 'last_name',
-        'message': 'Last Name: ',
-    },
-    {
-        'type': 'input',
-        'name': 'email',
-        'message': 'Email Address: ',
-    },
-    {
-        'type': 'input',
-        'name': 'phone_number',
-        'message': 'Phone Number: ',
-    },
-    {
-        'type': 'input',
-        'name': 'address_line_1',
-        'message': 'Address Line 1: ',
-    },
-    {
-        'type': 'input',
-        'name': 'address_line_2',
-        'message': 'Address Line 2: ',
-    },
-    {
-        'type': 'input',
-        'name': 'city',
-        'message': 'City: ',
-    },
-    {
-        'type': 'input',
-        'name': 'state',
-        'message': 'State: ',
-    },
-    {
-        'type': 'input',
-        'name': 'zipcode',
-        'message': 'Zipcode: ',
-    },
-    {
-        'type': 'input',
-        'name': 'country',
-        'message': 'Country: ',
-    },
-]
-
-# Headers which display above the list of contacts in the search function or
-# when viewing all entries.
-HEADERS = ['#', 'First Name', 'Last Name', 'Email', 'Phone Number',
-           'Address Line 1', 'Address Line 2', 'City', 'State', 'Zipcode',
-           'Country']
 
 
 def db_connect():
