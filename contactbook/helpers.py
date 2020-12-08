@@ -105,7 +105,7 @@ def delete_contact():
     print_list = search_results()
 
     # Create a list showing just the id and first and last name for each
-    # contact from the search results
+    # contact from the search results. The id is in case of duplicates.
     if print_list != []:
         name_list = [f"{i[0]}   {i[1]} {i[2]}" for i in print_list]
 
@@ -118,18 +118,27 @@ def delete_contact():
             },
         ]
         results = prompt(delete_prompt)['choose_delete'].split()
+
+        # Contact has more than two names and one id
         if len(results) > 3:
             delete_id = results[0]
             identifier = results[1:]
+
+        # Contact has two names and one id
         elif len(results) == 3:
             delete_id, delete_firstname, delete_lastname = results
             identifier = delete_firstname + ' ' + delete_lastname
+
+        # Contact has only one name and one id
         elif len(results) == 2:
             delete_id, delete_name = results
             identifier = delete_name
+
+        # Contact has only an id as an identifier
         elif len(results) == 1:
             delete_id = results[0]
             identifier = delete_id
+
         # Get the first and last name from the user's choice
         delete_confirmation = [
             {
@@ -169,7 +178,8 @@ def update_contact():
                 'type': 'list',
                 'name': 'choose_update',
                 'message': 'Choose the contact that you wish to update'
-                           ' (press Enter to keep current data):',
+                           ' (press Enter to skip the field and keep current \
+                            data):',
                 'choices': name_list
             },
         ]
