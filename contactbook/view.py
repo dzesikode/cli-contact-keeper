@@ -66,6 +66,7 @@ HEADERS = ['#', 'First Name', 'Last Name', 'Email', 'Phone Number',
            'Address Line 1', 'Address Line 2', 'City', 'State', 'Zipcode',
            'Country']
 
+
 def start_menu_prompt():
     """
     Displays the first prompt the user sees when starting the program. Returns
@@ -107,21 +108,30 @@ def menu_prompt(option):
     return selection
 
 
-def display_results(print_list, headers=HEADERS, tablefmt='fancy_grid'):
-    print(tabulate(print_list, headers, tablefmt))
-    print('\n')
-    return print_list
-
-
+#TODO combine print_list_func and display_results?
 def print_list_func(instance, print_list):
     """
-    Takes in an instance and an empty list as arguments and returns a list of
-    instance information. Used for display when searching the contact book or
-    viewing all entries.
+    Returns a list of instance information. Used for display when querying the
+    contact book or viewing all entries.
+    
     """
     print_list.append([instance.id, instance.first_name, instance.last_name,
                        instance.email, instance.phone_number,
                        instance.address_line_1, instance.address_line_2,
                        instance.city, instance.state, instance.zipcode,
                        instance.country])
+    return print_list
+
+
+def display_results(print_list, headers=HEADERS, tablefmt='fancy_grid'):
+    """
+    Displays the contacts when viewing all or when searching for a contact.
+
+    Keyword arguments:
+    print_list: The list of contacts to be displayed
+    headers: The headers to be displayed above the contact(s) (default HEADERS)
+    tablefmt: How the table should be formatted with tabulate (default fancy_grid)
+    """
+    print(tabulate(print_list, headers, tablefmt))
+    print('\n')
     return print_list
