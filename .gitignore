@@ -5,3 +5,5 @@ contactbook/__pycache__
 contactbook/.pytest_cache
 contactbook/tests/__pycache__
 contact_book.db
+.vscode
+.vscode/*
