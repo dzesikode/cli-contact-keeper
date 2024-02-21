@@ -5,6 +5,8 @@ from __future__ import print_function, unicode_literals
 from PyInquirer import prompt
 from tabulate import tabulate
 
+from contactbook.models import Contact
+
 
 # A list of prompts used when adding a new contact or updating one.
 CONTACT_FIELDS = [
@@ -108,7 +110,7 @@ def menu_prompt(option: str) -> dict:
 
 
 #TODO combine print_list_func and display_results?
-def print_list_func(instance, print_list):
+def print_list_func(instance: Contact, print_list: list[str]) -> list[str]:
     """
     Returns a list of instance information. Used for display when querying the
     contact book or viewing all entries.
@@ -122,7 +124,7 @@ def print_list_func(instance, print_list):
     return print_list
 
 
-def display_results(print_list, headers=HEADERS, tablefmt='fancy_grid'):
+def display_results(print_list, headers=HEADERS, tablefmt='fancy_grid') -> list[str]:
     """
     Displays the contacts when viewing all or when searching for a contact.
 

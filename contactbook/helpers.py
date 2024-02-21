@@ -1,38 +1,41 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from models import Base, Contact
+from config import SESSION, URI
+from contactbook.models import Base, Contact
 from sqlalchemy import create_engine, or_
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from PyInquirer import prompt
-from view import print_list_func, display_results, CONTACT_FIELDS, HEADERS
-from tabulate import tabulate
+from sqlalchemy_utils import database_exists, create_database
+from contactbook.view import print_list_func, display_results, CONTACT_FIELDS
+
+def db_session() -> Session:
+    return SESSION
 
 
-def db_connect():
+def db_connect() -> Session:
     """
     Connect to the sqlite database.
     """
-    # Connect to the engine.
-    engine = create_engine('sqlite:///contact_book.db', echo=False)
+    engine = create_engine(URI, echo=False)
 
-    # Create a schema
+    if not database_exists(URI):
+        create_database(URI)
+
     Base.metadata.create_all(engine)
 
-    # Create a session
     Session = sessionmaker(bind=engine)
     Session.configure(bind=engine)
 
-    # Instantiate session when needed to connect to the database
-    session = Session()
+    SESSION = Session()
+    return SESSION
 
-    return session
 
 
 session = db_connect()
 
 
-def add_contact():
+def add_contact() -> None:
     """
     Save a new contact to the database.
     """
@@ -51,11 +54,11 @@ def add_contact():
         session.add(new_contact)
         session.commit()
         print("New contact successfully added.")
-    except Exception:
-        print("An unexpected error occured.")
+    except Exception as e:
+        print(f"{e} An unexpected error occured.")
 
 
-def search_prompt():
+def search_prompt() -> str:
     """
     Prompt that returns a search query for use with querying the database
     """
@@ -70,7 +73,7 @@ def search_prompt():
     return search_query
 
 
-def view_all_entries():
+def view_all_entries() -> list[str]:
     """
     Views all entries within the database, along with headers.
     """
@@ -80,7 +83,7 @@ def view_all_entries():
     display_results(print_list)
 
 
-def search_results():
+def search_results() -> list[str]:
     """
     Displays results based on the search query, along with a header.
     """
@@ -98,7 +101,7 @@ def search_results():
     return print_list
 
 
-def delete_contact():
+def delete_contact() -> None:
     """
     Removes the specified contact from the database.
     """
@@ -163,7 +166,7 @@ def delete_contact():
         pass
 
 
-def update_contact():
+def update_contact() -> None:
     """
     Updates contact information.
     """

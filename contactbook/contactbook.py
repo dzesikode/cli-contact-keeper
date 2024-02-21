@@ -6,7 +6,8 @@ from contactbook.helpers import add_contact, delete_contact, search_results, \
 from contactbook.view import menu_prompt, start_menu_prompt
 
 
-def start_menu():
+def start_menu() -> None:
+    """Entry point for the program."""
     while True:
         selection = start_menu_prompt()
 
