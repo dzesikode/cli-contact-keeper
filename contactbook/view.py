@@ -67,7 +67,7 @@ HEADERS = ['#', 'First Name', 'Last Name', 'Email', 'Phone Number',
            'Country']
 
 
-def start_menu_prompt():
+def start_menu_prompt() -> dict:
     """
     Displays the first prompt the user sees when starting the program. Returns
     the user's selection from the choices listed below.
@@ -88,20 +88,19 @@ def start_menu_prompt():
     return selection
 
 
-def menu_prompt(option):
+def menu_prompt(option: str) -> dict:
     """
     Secondary menu prompt. Displays after a user has completed an action.
     Returns the user's selection from the choices listed below.
     """
-    menu_options = [" another contact", "Return to the main menu",
+    menu_options = [f"{option} another contact", "Return to the main menu",
                     "Exit the program"]
     menu_prompt = [
         {
             'type': 'list',
             'name': 'menu_options',
             'message': 'What do you want to do?',
-            'choices': [option + menu_options[0], menu_options[1],
-                        menu_options[2]]
+            'choices': menu_options
         }
     ]
     selection = prompt(menu_prompt)['menu_options']
@@ -132,6 +131,5 @@ def display_results(print_list, headers=HEADERS, tablefmt='fancy_grid'):
     headers: The headers to be displayed above the contact(s) (default HEADERS)
     tablefmt: How the table should be formatted with tabulate (default fancy_grid)
     """
-    print(tabulate(print_list, headers, tablefmt))
-    print('\n')
+    print(tabulate(print_list, headers, tablefmt), end='\n')
     return print_list
