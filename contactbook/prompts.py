@@ -1,7 +1,7 @@
 from PyInquirer import prompt
 
 
-def menu_prompt(option: str) -> dict:
+def menu_prompt(option: str) -> str:
     """
     Secondary menu prompt. Displays after a user has completed an action.
     Returns the user's selection from the choices listed below.
@@ -35,7 +35,7 @@ def search_prompt() -> str:
     return search_query
 
 
-def start_menu_prompt() -> dict:
+def start_menu_prompt() -> str:
     """
     Displays the first prompt the user sees when starting the program. Returns
     the user's selection from the choices listed below.
