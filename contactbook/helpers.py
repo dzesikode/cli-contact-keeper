@@ -7,6 +7,7 @@ from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker, Session
 from PyInquirer import prompt
 from sqlalchemy_utils import database_exists, create_database
+from contactbook.prompts import search_prompt
 from contactbook.view import print_list_func, display_results, CONTACT_FIELDS
 
 def db_session() -> Session:
@@ -57,20 +58,6 @@ def add_contact() -> None:
     except Exception as e:
         print(f"{e} An unexpected error occured.")
 
-
-def search_prompt() -> str:
-    """
-    Prompt that returns a search query for use with querying the database
-    """
-    search_field = [
-        {
-            'type': 'input',
-            'name': 'search',
-            'message': 'Enter a search term: ',
-        },
-    ]
-    search_query = prompt(search_field)['search']
-    return search_query
 
 
 def view_all_entries() -> list[str]:

@@ -3,7 +3,7 @@
 
 from contactbook.helpers import add_contact, delete_contact, search_results, \
                     update_contact, view_all_entries
-from contactbook.view import menu_prompt, start_menu_prompt
+from contactbook.prompts import menu_prompt, start_menu_prompt
 
 
 def start_menu() -> None:
