@@ -30,7 +30,6 @@ def db_connect() -> Session:
     return SESSION
 
 
-
 session = db_connect()
 
 
@@ -60,10 +59,16 @@ def search_contacts(query: str) -> None:
     """
     Searches contacts and displays the results.
     """
-    results = session.query(Contact).filter(
-                        or_(
-                            (Contact.last_name.ilike(f'%{query}%')),
-                            (Contact.first_name.ilike(f'%{query}%')))).all()
+    results = (
+        session.query(Contact)
+        .filter(
+            or_(
+                (Contact.last_name.ilike(f"%{query}%")),
+                (Contact.first_name.ilike(f"%{query}%")),
+            )
+        )
+        .all()
+    )
     return display_contacts(results)
 
 
@@ -101,15 +106,25 @@ def display_contacts(contacts: list[Contact]) -> list[str]:
     """
     Displays the contacts when viewing all or when searching for a contact.
     """
-    HEADERS = ['#', 'First Name', 'Last Name', 'Email', 'Phone',
-           'Line 1', 'Line 2', 'City', 'State', 'ZIP',
-           'Country']
-    
+    HEADERS = [
+        "#",
+        "First Name",
+        "Last Name",
+        "Email",
+        "Phone",
+        "Line 1",
+        "Line 2",
+        "City",
+        "State",
+        "ZIP",
+        "Country",
+    ]
+
     rows = []
     if not contacts:
         print("No results found.\n")
         return rows
     for contact in contacts:
         rows.append(contact.field_values())
-    print(tabulate(rows, HEADERS, 'fancy_grid'), end='\n')
+    print(tabulate(rows, HEADERS, "fancy_grid"), end="\n")
     return rows

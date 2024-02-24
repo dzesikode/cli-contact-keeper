@@ -6,6 +6,7 @@ import pytest
 
 from contactbook.models import Contact
 
+
 def generate_contact_data(**kwargs) -> dict:
     """Generate contact data for testing."""
     data = dict(
@@ -32,7 +33,6 @@ def create_contact() -> Contact:
         return add_contact(data)
 
     return wrapper
-
 
 
 @pytest.fixture(autouse=True)

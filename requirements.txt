@@ -6,3 +6,4 @@ sqlalchemy-utils==0.41.1
 
 # Dev requirements
 pytest==8.0.1
+black==24.2.0

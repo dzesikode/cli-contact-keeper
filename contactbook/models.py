@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from typing_extensions import Self
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Sequence, Column, Integer, String
 from sqlalchemy.orm import DeclarativeBase
+
 
 class Base(DeclarativeBase):
 
@@ -15,14 +15,25 @@ class Base(DeclarativeBase):
             dict_[key] = getattr(self, key)
         return dict_
 
+
 class Contact(Base):
 
-    __tablename__ = 'contacts'
+    __tablename__ = "contacts"
 
-    fields = ['first_name', 'last_name', 'phone_number', 'email', 'address_line_1', 'address_line_2',
-              'city', 'state', 'zipcode', 'country']
+    fields = [
+        "first_name",
+        "last_name",
+        "phone_number",
+        "email",
+        "address_line_1",
+        "address_line_2",
+        "city",
+        "state",
+        "zipcode",
+        "country",
+    ]
 
-    id = Column(Integer, Sequence('contact_id_seq'), primary_key=True)
+    id = Column(Integer, Sequence("contact_id_seq"), primary_key=True)
     last_name = Column(String)
     first_name = Column(String)
     phone_number = Column(String)
@@ -43,4 +54,3 @@ class Contact(Base):
         for field in self.fields:
             info.append(getattr(self, field))
         return info
-

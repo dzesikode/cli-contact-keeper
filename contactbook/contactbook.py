@@ -1,9 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from contactbook.helpers import add_contact, delete_contact, search_contacts, \
-                    update_contact, view_all_entries
-from contactbook.prompts import delete_contact_prompt, menu_prompt, search_prompt, start_menu_prompt, contact_field_prompts, update_contact_prompt
+from contactbook.helpers import (
+    add_contact,
+    delete_contact,
+    search_contacts,
+    update_contact,
+    view_all_entries,
+)
+from contactbook.prompts import (
+    delete_contact_prompt,
+    menu_prompt,
+    search_prompt,
+    start_menu_prompt,
+    contact_field_prompts,
+    update_contact_prompt,
+)
 
 
 def start_menu() -> None:
@@ -77,5 +89,5 @@ def start_menu() -> None:
             exit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     start_menu()
