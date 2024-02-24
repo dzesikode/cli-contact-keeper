@@ -1,18 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from typing_extensions import Self
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Sequence, Column, Integer, String
+from sqlalchemy.orm import DeclarativeBase
 
-Base = declarative_base()
+class Base(DeclarativeBase):
 
+    def to_dict(self: Self) -> dict:
+        """Return fields as a dictionary."""
+        dict_ = {}
+        for key in self.__mapper__.c.keys():
+            dict_[key] = getattr(self, key)
+        return dict_
 
 class Contact(Base):
 
     __tablename__ = 'contacts'
 
-    fields = ['last_name', 'first_name', 'address_line_1', 'address_line_2',
-              'city', 'state', 'zipcode', 'country', 'phone_number', 'email']
+    fields = ['first_name', 'last_name', 'phone_number', 'email', 'address_line_1', 'address_line_2',
+              'city', 'state', 'zipcode', 'country']
 
     id = Column(Integer, Sequence('contact_id_seq'), primary_key=True)
     last_name = Column(String)
@@ -26,5 +34,13 @@ class Contact(Base):
     zipcode = Column(String)
     country = Column(String)
 
-    def __repr__(self):
-        return self.last_name + ', ' + self.first_name
+    def __repr__(self: Self) -> str:
+        return f"{self.id}  {self.first_name} {self.last_name}"
+
+    def field_values(self: Self) -> list[str]:
+        """Return all fields."""
+        info = []
+        for field in self.fields:
+            info.append(getattr(self, field))
+        return info
+

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from contactbook.helpers import add_contact, delete_contact, search_results, \
+from contactbook.helpers import add_contact, delete_contact, search_contacts, \
                     update_contact, view_all_entries
-from contactbook.prompts import menu_prompt, start_menu_prompt
+from contactbook.prompts import delete_contact_prompt, menu_prompt, search_prompt, start_menu_prompt, contact_field_prompts, update_contact_prompt
 
 
 def start_menu() -> None:
@@ -14,7 +14,8 @@ def start_menu() -> None:
         # Add a new contact
         if selection.startswith("Add"):
             while True:
-                add_contact()
+                new_contact_data = contact_field_prompts()
+                add_contact(new_contact_data)
                 selection = menu_prompt("Add")
                 if selection.startswith("Return"):
                     break
@@ -26,7 +27,10 @@ def start_menu() -> None:
         # Delete a contact
         elif selection.startswith("Delete"):
             while True:
-                delete_contact()
+                query = search_prompt()
+                results = search_contacts(query)
+                id = delete_contact_prompt(results)
+                delete_contact(id)
                 selection = menu_prompt("Delete")
                 if selection.startswith("Return"):
                     break
@@ -38,7 +42,8 @@ def start_menu() -> None:
         # Search the contact book
         elif selection.startswith("Search"):
             while True:
-                search_results()
+                query = search_prompt()
+                search_contacts(query)
                 selection = menu_prompt("Search for")
                 if selection.startswith("Return"):
                     break
@@ -50,7 +55,10 @@ def start_menu() -> None:
         # Update contact information
         elif selection.startswith("Update"):
             while True:
-                update_contact()
+                query = search_prompt()
+                results = search_contacts(query)
+                updated_fields = update_contact_prompt(results)
+                update_contact(updated_fields)
                 selection = menu_prompt("Update")
                 if selection.startswith("Return"):
                     break
@@ -67,7 +75,6 @@ def start_menu() -> None:
         # Exit the program.
         elif selection.startswith("Exit"):
             exit()
-            break
 
 
 if __name__ == '__main__':
