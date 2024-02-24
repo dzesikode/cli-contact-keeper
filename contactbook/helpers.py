@@ -1,32 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from tabulate import tabulate
-from config import SESSION, URI
-from contactbook.models import Base, Contact
-from sqlalchemy import create_engine, or_
-from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy_utils import database_exists, create_database
-
-
-def db_connect() -> Session:
-    """
-    Connect to the sqlite database.
-    """
-    engine = create_engine(URI, echo=False)
-
-    if not database_exists(URI):
-        create_database(URI)
-
-    Base.metadata.create_all(engine)
-
-    Session = sessionmaker(bind=engine)
-    Session.configure(bind=engine)
-
-    SESSION = Session()
-    return SESSION
-
-
-session = db_connect()
+from contactbook.database import session
+from contactbook.models import Contact
+from sqlalchemy import or_
 
 
 def add_contact(answers: dict) -> Contact:
@@ -35,8 +12,8 @@ def add_contact(answers: dict) -> Contact:
     """
     try:
         new_contact = Contact(**answers)
-        session.add(new_contact)
-        session.commit()
+        session().add(new_contact)
+        session().commit()
         print("New contact successfully added.")
         return new_contact
     except Exception as e:
@@ -47,7 +24,7 @@ def view_all_entries() -> list[str]:
     """
     Views all entries within the database, along with headers.
     """
-    entries = session.query(Contact).order_by(Contact.last_name).all()
+    entries = session().query(Contact).order_by(Contact.last_name).all()
     display_contacts(entries)
 
 
@@ -56,7 +33,8 @@ def search_contacts(query: str) -> None:
     Searches contacts and displays the results.
     """
     results = (
-        session.query(Contact)
+        session()
+        .query(Contact)
         .filter(
             or_(
                 (Contact.last_name.ilike(f"%{query}%")),
@@ -73,9 +51,9 @@ def delete_contact(contact_id: int) -> None:
     Removes the specified contact from the database.
     """
     try:
-        contact = session.get(Contact, contact_id)
-        session.delete(contact)
-        session.commit()
+        contact = session().get(Contact, contact_id)
+        session().delete(contact)
+        session().commit()
         print("Contact successfully deleted.")
     except Exception as e:
         print(f"Failed to delete contact: {e}")
@@ -86,12 +64,12 @@ def update_contact(updated_fields: dict) -> Contact:
     Updates contact information.
     """
     id = updated_fields.pop("id")
-    contact = session.get(Contact, id)
+    contact = session().get(Contact, id)
     try:
         for key, value in updated_fields.items():
             if value:
                 setattr(contact, key, value)
-        session.commit()
+        session().commit()
         print("Contact successfully updated.")
         return contact
     except Exception as e:

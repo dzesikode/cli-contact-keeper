@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from contactbook.database import db_connect
 from contactbook.helpers import (
     view_all_entries,
 )
@@ -11,10 +12,13 @@ from contactbook.prompts import (
     start_menu_prompt,
     update_menu,
 )
+from config import SESSION
 
 
 def start_menu() -> None:
     """Entry point for the program."""
+    session = db_connect()
+    SESSION["session"] = session
     while True:
         selection = start_menu_prompt()
         choice = selection.split()[0].lower()
