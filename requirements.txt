@@ -2,3 +2,7 @@ sqlalchemy==2.0.27
 PyInquirer==1.0.3
 tabulate==0.9.0
 prompt_toolkit==1.0.14
+sqlalchemy-utils==0.41.1
+
+# Dev requirements
+pytest==8.0.1
