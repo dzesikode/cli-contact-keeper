@@ -21,6 +21,7 @@ class Contact(Base):
     __tablename__ = "contacts"
 
     fields = [
+        "id",
         "first_name",
         "last_name",
         "phone_number",
@@ -47,10 +48,3 @@ class Contact(Base):
 
     def __repr__(self: Self) -> str:
         return f"{self.id}  {self.first_name} {self.last_name}"
-
-    def field_values(self: Self) -> list[str]:
-        """Return all fields."""
-        info = []
-        for field in self.fields:
-            info.append(getattr(self, field))
-        return info

@@ -8,10 +8,6 @@ from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy_utils import database_exists, create_database
 
 
-def db_session() -> Session:
-    return SESSION
-
-
 def db_connect() -> Session:
     """
     Connect to the sqlite database.
@@ -125,6 +121,6 @@ def display_contacts(contacts: list[Contact]) -> list[str]:
         print("No results found.\n")
         return rows
     for contact in contacts:
-        rows.append(contact.field_values())
+        rows.append(contact.__repr__())
     print(tabulate(rows, HEADERS, "fancy_grid"), end="\n")
     return rows
