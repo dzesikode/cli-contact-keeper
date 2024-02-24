@@ -45,6 +45,3 @@ class Contact(Base):
     state = Column(String)
     zipcode = Column(String)
     country = Column(String)
-
-    def __repr__(self: Self) -> str:
-        return f"{self.id}  {self.first_name} {self.last_name}"

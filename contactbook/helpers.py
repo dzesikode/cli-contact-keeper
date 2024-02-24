@@ -76,29 +76,37 @@ def update_contact(updated_fields: dict) -> Contact:
         print(f"Failed to update contact: {e}")
 
 
+def get_headers(contact: Contact) -> list[str]:
+    result = []
+    headers = contact.__table__.columns.keys()
+    for header in headers:
+        if (
+            header.startswith("last")
+            or header.startswith("first")
+            or header.startswith("phone")
+        ):
+            result.append(header.split("_")[0])
+        elif header.startswith("address"):
+            result.append(f"line_{header[-1]}")
+        elif header == "zipcode":
+            result.append("zip")
+        else:
+            result.append(header)
+    return result
+
+
 def display_contacts(contacts: list[Contact]) -> list[str]:
     """
     Displays the contacts when viewing all or when searching for a contact.
     """
-    HEADERS = [
-        "#",
-        "First",
-        "Last",
-        "Email",
-        "Phone",
-        "Line 1",
-        "Line 2",
-        "City",
-        "State",
-        "ZIP",
-        "Country",
-    ]
+
+    headers = get_headers(contacts[0])
 
     rows = []
     if not contacts:
         print("No results found.\n")
         return rows
     for contact in contacts:
-        rows.append(contact.__repr__())
-    print(tabulate(rows, HEADERS, "fancy_grid"), end="\n")
+        rows.append(contact.to_dict().values())
+    print(tabulate(rows, headers, "fancy_grid"), end="\n")
     return rows
