@@ -82,8 +82,8 @@ def display_contacts(contacts: list[Contact]) -> list[str]:
     """
     HEADERS = [
         "#",
-        "First Name",
-        "Last Name",
+        "First",
+        "Last",
         "Email",
         "Phone",
         "Line 1",

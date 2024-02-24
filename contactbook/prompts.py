@@ -128,7 +128,7 @@ def delete_contact_prompt(contacts: list[Contact]) -> int:
             "type": "list",
             "name": "choose_delete",
             "message": "Choose the contact that you wish to delete:",
-            "choices": [contact.__repr__() for contact in contacts],
+            "choices": contacts,
         },
     ]
     contact_name: list[str] = prompt(delete_prompt)["choose_delete"].split()

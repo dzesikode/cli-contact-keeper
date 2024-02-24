@@ -1,8 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy_utils import drop_database
-from config import DB_NAME, URI
-from contactbook.helpers import db_connect
+from config import DB_NAME, SESSION, URI
 import pytest
+from contactbook.database import db_connect, session
 
 from contactbook.models import Contact
 
@@ -37,9 +37,10 @@ def create_contact() -> Contact:
 
 @pytest.fixture(autouse=True)
 def setup_and_teardown():
-    session = db_connect()
+    session_ = db_connect()
+    SESSION["session"] = session_
     yield
-    session.close()
+    session().close()
     drop_database(URI)
     print(f"Deleting database {DB_NAME}")
 
@@ -52,7 +53,7 @@ def test_add_contact():
 
     add_contact(data)
 
-    results = db_connect().scalars(select(Contact)).all()
+    results = session().scalars(select(Contact)).all()
     assert len(results) == 1
     result_dict = results[0].to_dict()
     assert result_dict.pop("id", None)
@@ -71,7 +72,7 @@ def test_update_contact(create_contact):
 
     update_contact({"id": contact.id, "address_line_1": new_address})
 
-    contacts = db_connect().scalars(select(Contact)).all()
+    contacts = session().scalars(select(Contact)).all()
     assert len(contacts) == 1
     contact_fields = contacts[0].to_dict()
     assert contact_fields == {**contact.to_dict(), "address_line_1": new_address}
@@ -85,6 +86,6 @@ def test_delete_contact(create_contact):
 
     delete_contact(contact_1.id)
 
-    contacts = db_connect().scalars(select(Contact)).all()
+    contacts = session().scalars(select(Contact)).all()
     assert len(contacts) == 1
     assert contacts[0].id == contact_2.id
