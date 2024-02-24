@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy_utils import drop_database
 from config import DB_NAME, URI
-from contactbook.helpers import db_connect, db_session
+from contactbook.helpers import db_connect
 import pytest
 
 from contactbook.models import Contact
@@ -44,13 +44,11 @@ def setup_and_teardown():
     print(f"Deleting database {DB_NAME}")
 
 
-def test_add_contact(monkeypatch):
+def test_add_contact():
     """Ensure a contact is properly saved to the db."""
-    import contactbook.helpers
     from contactbook.helpers import add_contact
 
     data = generate_contact_data()
-    monkeypatch.setattr(contactbook.helpers, "prompt", lambda x: data)
 
     add_contact(data)
 
