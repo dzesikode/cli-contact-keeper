@@ -23,8 +23,9 @@ Simply clone the repository into a virtual environment running Python 3.9. Insta
 
 ```python main.py```
 
-## Planned Improvements & To-Do's
+## Roadmap
 
 - Data validation
 - CSV export
 - Additional test coverage
+- Support newest Python version
