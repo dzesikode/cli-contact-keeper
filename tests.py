@@ -26,12 +26,9 @@ def generate_contact_data(**kwargs) -> dict:
 
 @pytest.fixture
 def create_contact() -> Contact:
-    from contactbook.helpers import add_contact
-
     def wrapper(**kwargs) -> Contact:
         data = generate_contact_data(**kwargs)
-        return add_contact(data)
-
+        return Contact.create(data)
     return wrapper
 
 
@@ -47,13 +44,11 @@ def setup_and_teardown():
 
 def test_add_contact():
     """Ensure a contact is properly saved to the db."""
-    from contactbook.helpers import add_contact
-
     data = generate_contact_data()
 
-    add_contact(data)
+    Contact.create(data)
 
-    results = session().scalars(select(Contact)).all()
+    results = Contact.get_all()
     assert len(results) == 1
     result_dict = results[0].to_dict()
     assert result_dict.pop("id", None)
@@ -62,17 +57,15 @@ def test_add_contact():
 
 def test_update_contact(create_contact):
     """Ensure a contact is properly updated."""
-    from contactbook.helpers import update_contact
-
     old_address = "900 Pytest Lane"
     new_address = "5675 Forest Road"
 
     contact: Contact = create_contact(address_line_1=old_address)
     assert contact.address_line_1 == old_address
 
-    update_contact({"id": contact.id, "address_line_1": new_address})
+    contact.update({"address_line_1": new_address})
 
-    contacts = session().scalars(select(Contact)).all()
+    contacts = Contact.get_all()
     assert len(contacts) == 1
     contact_fields = contacts[0].to_dict()
     assert contact_fields == {**contact.to_dict(), "address_line_1": new_address}
@@ -80,12 +73,11 @@ def test_update_contact(create_contact):
 
 def test_delete_contact(create_contact):
     """Ensure a contact is properly deleted."""
-    from contactbook.helpers import delete_contact
+    contact_1: Contact = create_contact()
+    contact_2: Contact = create_contact()
 
-    contact_1, contact_2 = [create_contact(), create_contact()]
+    contact_1.delete()
 
-    delete_contact(contact_1.id)
-
-    contacts = session().scalars(select(Contact)).all()
+    contacts = Contact.get_all()
     assert len(contacts) == 1
     assert contacts[0].id == contact_2.id

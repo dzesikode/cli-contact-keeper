@@ -1,9 +1,7 @@
 from PyInquirer import prompt
+from sqlalchemy import or_
 from contactbook.helpers import (
-    add_contact,
-    delete_contact,
     search_contacts,
-    update_contact,
 )
 
 from contactbook.models import Contact
@@ -12,16 +10,16 @@ MAIN_MENU = [
     "Add a new contact",
     "Delete a contact",
     "Search the address book",
-    "Update contact information",
+    "Update contact info",
     "View all entries",
-    "Exit the program",
+    "Exit",
 ]
 
 
 def contact_field_prompts() -> dict:
     """Displays prompts necessary for adding or updating a contact. Returns the field names and values."""
     prompts = []
-    for field in Contact.fields:
+    for field in Contact.get_fields():
         if field != "id":
             field_msg = field.replace("_", " ").title()
             contact_prompt = {
@@ -146,7 +144,8 @@ def update_menu():
         query = search_prompt()
         results = search_contacts(query)
         updated_fields = update_contact_prompt(results)
-        update_contact(updated_fields)
+        updated_fields = {k: updated_fields[k] for k in updated_fields if updated_fields[k]}
+        Contact.update(updated_fields)
         selection = menu_prompt("Update")
         if selection.startswith("Return"):
             break
@@ -172,7 +171,8 @@ def delete_menu():
         query = search_prompt()
         results = search_contacts(query)
         id = delete_contact_prompt(results)
-        delete_contact(id)
+        contact = Contact.get(id)
+        contact.delete()
         selection = menu_prompt("Delete")
         if selection.startswith("Return"):
             break
@@ -185,7 +185,7 @@ def delete_menu():
 def add_menu():
     while True:
         new_contact_data = contact_field_prompts()
-        add_contact(new_contact_data)
+        Contact.create(new_contact_data)
         selection = menu_prompt("Add")
         if selection.startswith("Return"):
             break

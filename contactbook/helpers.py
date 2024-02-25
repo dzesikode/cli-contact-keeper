@@ -6,92 +6,41 @@ from contactbook.models import Contact
 from sqlalchemy import or_
 
 
-def add_contact(answers: dict) -> Contact:
-    """
-    Save a new contact to the database.
-    """
-    try:
-        new_contact = Contact(**answers)
-        session().add(new_contact)
-        session().commit()
-        print("New contact successfully added.")
-        return new_contact
-    except Exception as e:
-        print(f"{e} An unexpected error occured.")
-
-
 def view_all_entries() -> list[str]:
     """
     Views all entries within the database, along with headers.
     """
-    entries = session().query(Contact).order_by(Contact.last_name).all()
-    display_contacts(entries)
+    contacts = Contact.get_all(order_by="last_name")
+    display_contacts(contacts)
 
 
 def search_contacts(query: str) -> None:
     """
     Searches contacts and displays the results.
     """
-    results = (
-        session()
-        .query(Contact)
-        .filter(
-            or_(
+    results = Contact.search(or_(
                 (Contact.last_name.ilike(f"%{query}%")),
                 (Contact.first_name.ilike(f"%{query}%")),
-            )
-        )
-        .all()
-    )
+    ))
     return display_contacts(results)
 
 
-def delete_contact(contact_id: int) -> None:
-    """
-    Removes the specified contact from the database.
-    """
-    try:
-        contact = session().get(Contact, contact_id)
-        session().delete(contact)
-        session().commit()
-        print("Contact successfully deleted.")
-    except Exception as e:
-        print(f"Failed to delete contact: {e}")
-
-
-def update_contact(updated_fields: dict) -> Contact:
-    """
-    Updates contact information.
-    """
-    id = updated_fields.pop("id")
-    contact = session().get(Contact, id)
-    try:
-        for key, value in updated_fields.items():
-            if value:
-                setattr(contact, key, value)
-        session().commit()
-        print("Contact successfully updated.")
-        return contact
-    except Exception as e:
-        print(f"Failed to update contact: {e}")
-
-
-def get_headers(contact: Contact) -> list[str]:
+def get_headers() -> list[str]:
     result = []
-    headers = contact.__table__.columns.keys()
-    for header in headers:
+    fields = Contact.get_fields()
+    for field in fields:
         if (
-            header.startswith("last")
-            or header.startswith("first")
-            or header.startswith("phone")
+            field.startswith("last")
+            or field.startswith("first")
+            or field.startswith("phone")
         ):
-            result.append(header.split("_")[0])
-        elif header.startswith("address"):
-            result.append(f"line_{header[-1]}")
-        elif header == "zipcode":
+            result.append(field.split("_")[0])
+        elif field.startswith("address"):
+            result.append(f"line_{field[-1]}")
+        elif field == "zipcode":
             result.append("zip")
         else:
-            result.append(header)
+            result.append(field)
     return result
 
 
