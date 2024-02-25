@@ -1,5 +1,5 @@
 # CLI Contact Keeper
-![GitHub License](https://img.shields.io/github/license/dzesikode/contact-book) 
+![GitHub License](https://img.shields.io/github/license/dzesikode/cli-contact-keeper) 
 ![Static Badge](https://img.shields.io/badge/python-3.9-blue)
 
 CLI Contact Keeper is an open-source, no-nonsense command line application for offline storage of contact information.
