@@ -4,6 +4,10 @@
 
 CLI Contact Keeper is an open-source, straightforward command line application for offline storage of contact information.
 
+
+<img width="875" alt="screenshot-1" src="https://github.com/dzesikode/cli-contact-keeper/assets/63923361/56515290-322c-4620-8ff6-bf069744dd2e">
+
+
 ## Features
 
 - Aesthetic, easy-to-use command line interface
