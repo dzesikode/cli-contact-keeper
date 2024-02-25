@@ -83,7 +83,7 @@ def start_menu_prompt() -> str:
 
 
 def update_contact_prompt(contacts: list[str]) -> dict:
-    """"""
+    """Prompt for updating of contacts"""
     if len(contacts) > 1:
         update_prompt = [
             {
@@ -104,6 +104,7 @@ def update_contact_prompt(contacts: list[str]) -> dict:
 
 
 def delete_confirmation_prompt(contact_name: str) -> bool:
+    """Prompt that confirms a deletion action."""
     delete_confirmation = [
         {
             "type": "confirm",
@@ -118,6 +119,7 @@ def delete_confirmation_prompt(contact_name: str) -> bool:
 
 
 def delete_contact_prompt(contacts: list[Contact]) -> int:
+    """Prompt for the deletion of a contact, if there is more than one found in the search results."""
     delete_prompt = [
         {
             "type": "list",
@@ -136,7 +138,8 @@ def delete_contact_prompt(contacts: list[Contact]) -> int:
         return int(delete_id)
 
 
-def update_menu():
+def update_menu() -> None:
+    """Starts the update menu."""
     while True:
         query = search_prompt()
         results = search_contacts(query)
@@ -153,7 +156,8 @@ def update_menu():
         continue
 
 
-def search_menu():
+def search_menu() -> None:
+    """Starts the search menu."""
     while True:
         query = search_prompt()
         search_contacts(query)
@@ -165,7 +169,8 @@ def search_menu():
         continue
 
 
-def delete_menu():
+def delete_menu() -> None:
+    """Starts the delete menu."""
     while True:
         query = search_prompt()
         results = search_contacts(query)
@@ -177,11 +182,11 @@ def delete_menu():
             break
         elif selection.startswith("Exit"):
             exit()
-        else:
-            continue
+        continue
 
 
-def add_menu():
+def add_menu() -> None:
+    """Starts the add menu."""
     while True:
         new_contact_data = contact_field_prompts()
         Contact.create(new_contact_data)
@@ -190,5 +195,4 @@ def add_menu():
             break
         elif selection.startswith("Exit"):
             exit()
-        else:
-            continue
+        continue
