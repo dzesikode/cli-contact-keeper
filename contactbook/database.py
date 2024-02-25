@@ -13,7 +13,7 @@ def db_connect() -> Session:
     Connect to the sqlite database.
     """
     from contactbook.models import Base
-    
+
     engine = create_engine(URI, echo=False)
 
     if not database_exists(URI):

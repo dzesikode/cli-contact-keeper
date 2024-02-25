@@ -1,4 +1,3 @@
-from sqlalchemy import select
 from sqlalchemy_utils import drop_database
 from config import DB_NAME, SESSION, URI
 import pytest
@@ -29,6 +28,7 @@ def create_contact() -> Contact:
     def wrapper(**kwargs) -> Contact:
         data = generate_contact_data(**kwargs)
         return Contact.create(data)
+
     return wrapper
 
 

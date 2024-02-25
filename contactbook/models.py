@@ -21,11 +21,11 @@ class Base(DeclarativeBase):
             except Exception as exception:
                 session().rollback()
                 raise exception
-    
+
     @classmethod
     def get(cls: Type[Self], ident: _PKIdentityArgument) -> Self | None:
         return session().get(cls, ident)
-    
+
     @classmethod
     def get_all(cls: Type[Self], order_by: Optional[str] = None) -> list[Self]:
         query = session().query(cls)
@@ -39,7 +39,7 @@ class Base(DeclarativeBase):
         session().add(new_obj)
         cls.commit()
         return new_obj
-    
+
     def update(self: Self, data: dict) -> None:
         for key, value in data.items():
             setattr(self, key, value)
@@ -50,7 +50,9 @@ class Base(DeclarativeBase):
         self.commit()
 
     @classmethod
-    def search(cls: Type[Self], *whereclause: ColumnExpressionArgument[bool]) -> list[Self]:
+    def search(
+        cls: Type[Self], *whereclause: ColumnExpressionArgument[bool]
+    ) -> list[Self]:
         return session().query(cls).filter(*whereclause).all()
 
     def to_dict(self: Self) -> dict:

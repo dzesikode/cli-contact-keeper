@@ -1,8 +1,5 @@
 from PyInquirer import prompt
-from sqlalchemy import or_
-from contactbook.helpers import (
-    search_contacts,
-)
+from contactbook.helpers import search_contacts
 
 from contactbook.models import Contact
 
@@ -144,7 +141,9 @@ def update_menu():
         query = search_prompt()
         results = search_contacts(query)
         updated_fields = update_contact_prompt(results)
-        updated_fields = {k: updated_fields[k] for k in updated_fields if updated_fields[k]}
+        updated_fields = {
+            k: updated_fields[k] for k in updated_fields if updated_fields[k]
+        }
         Contact.update(updated_fields)
         selection = menu_prompt("Update")
         if selection.startswith("Return"):

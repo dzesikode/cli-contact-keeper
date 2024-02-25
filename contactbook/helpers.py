@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from tabulate import tabulate
-from contactbook.database import session
 from contactbook.models import Contact
 from sqlalchemy import or_
 
@@ -18,10 +17,12 @@ def search_contacts(query: str) -> None:
     """
     Searches contacts and displays the results.
     """
-    results = Contact.search(or_(
-                (Contact.last_name.ilike(f"%{query}%")),
-                (Contact.first_name.ilike(f"%{query}%")),
-    ))
+    results = Contact.search(
+        or_(
+            (Contact.last_name.ilike(f"%{query}%")),
+            (Contact.first_name.ilike(f"%{query}%")),
+        )
+    )
     return display_contacts(results)
 
 
