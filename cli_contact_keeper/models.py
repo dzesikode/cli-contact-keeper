@@ -7,7 +7,7 @@ from sqlalchemy import ColumnExpressionArgument, Sequence, Column, Integer, Stri
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm.session import _PKIdentityArgument
 
-from contactbook.database import session
+from cli_contact_keeper.database import session
 
 
 class Base(DeclarativeBase):

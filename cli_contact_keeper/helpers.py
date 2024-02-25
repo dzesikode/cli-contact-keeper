@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from tabulate import tabulate
-from contactbook.models import Contact
+from cli_contact_keeper.models import Contact
 from sqlalchemy import or_
 
 
@@ -27,6 +27,7 @@ def search_contacts(query: str) -> None:
 
 
 def get_headers() -> list[str]:
+    """Return the headers used for the table to display contacts."""
     result = []
     fields = Contact.get_fields()
     for field in fields:
@@ -50,7 +51,7 @@ def display_contacts(contacts: list[Contact]) -> list[str]:
     Displays the contacts when viewing all or when searching for a contact.
     """
 
-    headers = get_headers(contacts[0])
+    headers = get_headers()
 
     rows = []
     if not contacts:

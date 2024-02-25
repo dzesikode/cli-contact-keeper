@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from contactbook.database import db_connect
-from contactbook.helpers import (
+from cli_contact_keeper.database import db_connect
+from cli_contact_keeper.helpers import (
     view_all_entries,
 )
-from contactbook.prompts import (
+from cli_contact_keeper.prompts import (
     add_menu,
     delete_menu,
     search_menu,

@@ -1,7 +1,7 @@
 from PyInquirer import prompt
-from contactbook.helpers import search_contacts
+from cli_contact_keeper.helpers import search_contacts
 
-from contactbook.models import Contact
+from cli_contact_keeper.models import Contact
 
 MAIN_MENU = [
     "Add a new contact",

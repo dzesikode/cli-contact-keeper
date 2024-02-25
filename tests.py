@@ -1,9 +1,9 @@
 from sqlalchemy_utils import drop_database
 from config import DB_NAME, SESSION, URI
 import pytest
-from contactbook.database import db_connect, session
+from cli_contact_keeper.database import db_connect, session
 
-from contactbook.models import Contact
+from cli_contact_keeper.models import Contact
 
 
 def generate_contact_data(**kwargs) -> dict:

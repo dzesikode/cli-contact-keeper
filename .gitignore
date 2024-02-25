@@ -1,9 +1,9 @@
-contactbook/contact_book.db
-contactbook/__pycache__
+cli-contact-keeper/contact_book.db
+cli_contact_keeper/__pycache__
 .venv
 .env
-contactbook/.pytest_cache
-contactbook/tests/__pycache__
+cli-contact-keeper/.pytest_cache
+cli-contact-keeper/tests/__pycache__
 contact_book.db
 .vscode
 .vscode/*

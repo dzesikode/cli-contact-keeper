@@ -12,7 +12,7 @@ def db_connect() -> Session:
     """
     Connect to the sqlite database.
     """
-    from contactbook.models import Base
+    from cli_contact_keeper.models import Base
 
     engine = create_engine(URI, echo=False)
 

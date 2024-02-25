@@ -1,8 +1,8 @@
-# Contact Book
+# CLI Contact Keeper
 ![GitHub License](https://img.shields.io/github/license/dzesikode/contact-book) 
 ![Static Badge](https://img.shields.io/badge/python-3.9-blue)
 
-Contact Book is an open-source, no-nonsense command line application for offline storage of contact information.
+CLI Contact Keeper is an open-source, no-nonsense command line application for offline storage of contact information.
 
 ## Features
 
@@ -17,11 +17,11 @@ Contact Book is an open-source, no-nonsense command line application for offline
 
 ## Setup
 
-Contact Book requires Python version 3.9 to run.
+CLI Contact Keeper requires Python version 3.9 to run.
 
 Simply clone the repository into a virtual environment running Python 3.9. Install the requirements and start the program with the following command:
 
-```python main.py```
+```python3 main.py```
 
 ## Roadmap
 
