@@ -46,7 +46,7 @@ def get_headers() -> list[str]:
     return result
 
 
-def display_contacts(contacts: list[Contact]) -> list[str]:
+def display_contacts(contacts: list[Contact]) -> list[list[str]]:
     """
     Displays the contacts when viewing all or when searching for a contact.
     """
@@ -58,6 +58,6 @@ def display_contacts(contacts: list[Contact]) -> list[str]:
         print("No results found.\n")
         return rows
     for contact in contacts:
-        rows.append(contact.to_dict().values())
+        rows.append(list(contact.to_dict().values()))
     print(tabulate(rows, headers, "fancy_grid"), end="\n")
     return rows

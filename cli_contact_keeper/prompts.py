@@ -74,7 +74,7 @@ def start_menu_prompt() -> str:
         {
             "type": "list",
             "name": "start_menu",
-            "message": "Contact Book",
+            "message": "CLI Contact Keeper",
             "choices": MAIN_MENU,
         }
     ]
@@ -82,21 +82,18 @@ def start_menu_prompt() -> str:
     return selection
 
 
-def update_contact_prompt(contacts: list[str]) -> dict:
+def update_contact_prompt(contacts: list[list[str]]) -> dict:
     """Prompt for updating of contacts"""
-    if len(contacts) > 1:
-        update_prompt = [
-            {
-                "type": "list",
-                "name": "choose_update",
-                "message": "Choose the contact that you wish to update (press Enter to skip the field and keep current data):",
-                "choices": contacts,
-            },
-        ]
-        contact_name: str = prompt(update_prompt)["choose_update"]
-        update_id = contact_name.split(" ")[0]
-    else:
-        update_id = contacts[0].split(" ")[0]
+    update_prompt = [
+        {
+            "type": "list",
+            "name": "choose_update",
+            "message": "Choose the contact that you wish to update (press Enter to skip the field and keep current data):",
+            "choices": [f"{contact[0]}  {contact[1]} {contact[2]}" for contact in contacts],
+        },
+    ]
+    contact_name: str = prompt(update_prompt)["choose_update"]
+    update_id = contact_name.split(" ")[0]
 
     updated_fields = contact_field_prompts()
     updated_fields["id"] = update_id
@@ -108,8 +105,7 @@ def delete_confirmation_prompt(contact_name: str) -> bool:
     delete_confirmation = [
         {
             "type": "confirm",
-            "message": f"Are you sure you want to delete {contact_name} from"
-            " the contact book?",
+            "message": f"Are you sure you want to delete {contact_name}?",
             "name": "delete_contact",
             "default": False,
         }
@@ -118,24 +114,25 @@ def delete_confirmation_prompt(contact_name: str) -> bool:
     return prompt(delete_confirmation)["delete_contact"]
 
 
-def delete_contact_prompt(contacts: list[Contact]) -> int:
+def delete_contact_prompt(contacts: list[list[str]]) -> int:
     """Prompt for the deletion of a contact, if there is more than one found in the search results."""
     delete_prompt = [
         {
             "type": "list",
             "name": "choose_delete",
             "message": "Choose the contact that you wish to delete:",
-            "choices": contacts,
+            "choices": [f"{contact[0]}  {contact[1]} {contact[2]}" for contact in contacts],
         },
     ]
-    contact_name: list[str] = prompt(delete_prompt)["choose_delete"].split()
+    contact: str = prompt(delete_prompt)["choose_delete"]
+    if contact:
+        contact = contact.split()
+        delete_id = contact.pop(0)
+        name = " ".join(contact)
 
-    delete_id = contact_name.pop(0)
-    name = " ".join(contact_name)
-
-    delete_confirmed = delete_confirmation_prompt(name)
-    if delete_confirmed:
-        return int(delete_id)
+        delete_confirmed = delete_confirmation_prompt(name)
+        if delete_confirmed:
+            return int(delete_id)
 
 
 def update_menu() -> None:
@@ -143,11 +140,13 @@ def update_menu() -> None:
     while True:
         query = search_prompt()
         results = search_contacts(query)
-        updated_fields = update_contact_prompt(results)
-        updated_fields = {
-            k: updated_fields[k] for k in updated_fields if updated_fields[k]
-        }
-        Contact.update(updated_fields)
+        if results:
+            updated_fields = update_contact_prompt(results)
+            contact = Contact.get(updated_fields["id"])
+            updated_fields = {
+                k: updated_fields[k] for k in updated_fields if updated_fields[k]
+            }
+            contact.update(updated_fields)
         selection = menu_prompt("Update")
         if selection.startswith("Return"):
             break
@@ -174,9 +173,10 @@ def delete_menu() -> None:
     while True:
         query = search_prompt()
         results = search_contacts(query)
-        id = delete_contact_prompt(results)
-        contact = Contact.get(id)
-        contact.delete()
+        if results:
+            id = delete_contact_prompt(results)
+            contact = Contact.get(id)
+            contact.delete()
         selection = menu_prompt("Delete")
         if selection.startswith("Return"):
             break
